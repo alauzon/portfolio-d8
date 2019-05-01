@@ -37,3 +37,42 @@ xmlrpc.php
 /profiles
 /scripts
 /themes
+
+# vendor
+vendor
+
+# PHPStorm
+.idea
+
+# Drupal contrib
+config/default/README.md
+config/envs/README.md
+docroot/autoload.php
+docroot/core
+docroot/libraries
+docroot/modules/contrib
+docroot/profiles
+docroot/modules/custom/README.md
+docroot/sites/default/default.local.drush.yml
+docroot/sites/default/default.services.yml
+docroot/sites/default/default.settings.php
+docroot/sites/default/local.drush.yml
+docroot/sites/default/services.yml
+docroot/sites/default/settings.php
+docroot/sites/default/settings/default.includes.settings.php
+docroot/sites/default/settings/default.local.settings.php
+docroot/sites/default/settings/local.settings.php
+docroot/sites/development.services.yml
+docroot/sites/example.settings.local.php
+docroot/sites/example.sites.php
+docroot/sites/settings/default.global.settings.php
+docroot/themes/contrib
+docroot/themes/custom/README.md
+salt.txt
+
+# Vagrant
+.vagrant
+
+# blt
+blt/local.blt.yml
+
