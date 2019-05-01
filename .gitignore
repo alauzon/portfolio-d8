@@ -69,10 +69,12 @@ docroot/sites/settings/default.global.settings.php
 docroot/themes/contrib
 docroot/themes/custom/README.md
 salt.txt
+tests/behat/local.yml
 
 # Vagrant
 .vagrant
 
 # blt
 blt/local.blt.yml
+deployment_identifier
 

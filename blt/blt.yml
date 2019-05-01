@@ -1,7 +1,7 @@
 project:
   machine_name: portfolio-d8
   prefix: BLT
-  human_name: 'BLTed 10'
+  human_name: 'Portfolio D8'
   profile:
     name: lightning
   local:
