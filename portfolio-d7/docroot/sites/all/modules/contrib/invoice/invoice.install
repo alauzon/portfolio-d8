@@ -1,0 +1,264 @@
+<?php
+
+/**
+ * @file
+ * Invoice module
+ *
+ * This module was developed by Platina Designs, http://www.platinadesigns.nl
+ *
+ * @author Pieter Vogelaar <ps.vogelaar@platinadesigns.nl>
+ */
+
+require_once DRUPAL_ROOT . '/' . drupal_get_path('module', 'invoice') . '/invoice_helpers.inc';
+
+/**
+ * Implementation of hook_install()
+ */
+function invoice_install() {
+
+  variable_set('invoice_locale', 'en_US.utf8');
+  variable_set('invoice_date_format', 'm/d/Y');
+  variable_set('invoice_pay_limit', '14'); // Pay limit in days
+  variable_set('invoice_vat', '19'); // VAT percentage
+  variable_set('invoice_invoice_number_zerofill', 4);
+  variable_set('invoice_invoice_number_prefix', '%Y');
+  variable_set('invoice_default_template', 'default');
+  variable_set('invoice_supplier_company_name', 'My company');
+
+  variable_set('invoice_display_column_vat', 0); // By default the VAT column is not displayed,
+                                                 // however if there is more than 1 different VAT
+                                                 // the VAT column will still be shown. (is required by law)
+  variable_set('invoice_display_column_exunitcost', 1);
+  variable_set('invoice_display_column_incunitcost', 1);
+  variable_set('invoice_display_column_extotal', 1);
+  variable_set('invoice_display_column_inctotal', 1);
+
+  _invoice_set_content_type_settings();
+}
+
+/**
+ * Implementation of hook_uninstall()
+ */
+function invoice_uninstall() {
+
+  // Delete invoice specific settings
+  variable_del('invoice_locale');
+  variable_del('invoice_date_format');
+  variable_del('invoice_pay_limit');
+  variable_del('invoice_vat');
+  variable_del('invoice_invoice_number_zerofill');
+  variable_del('invoice_invoice_number_prefix');
+  variable_del('invoice_default_template');
+  variable_del('invoice_supplier_company_name');
+
+  // Delete display columns specific settings
+  variable_del('invoice_display_column_vat');
+  variable_del('invoice_display_column_exunitcost');
+  variable_del('invoice_display_column_incunitcost');
+  variable_del('invoice_display_column_extotal');
+  variable_del('invoice_display_column_inctotal');
+
+  // Delete supplier specific settings
+  variable_del('invoice_supplier_company_name');
+  variable_del('invoice_supplier_street');
+  variable_del('invoice_supplier_building_number');
+  variable_del('invoice_supplier_zipcode');
+  variable_del('invoice_supplier_city');
+  variable_del('invoice_supplier_state');
+  variable_del('invoice_supplier_country');
+  variable_del('invoice_supplier_phone');
+  variable_del('invoice_supplier_fax');
+  variable_del('invoice_supplier_email');
+  variable_del('invoice_supplier_web');
+  variable_del('invoice_supplier_coc_number');
+  variable_del('invoice_supplier_vat_number');
+
+  // Delete API specific settings
+  variable_del('invoice_api_allowed_ips');
+  variable_del('invoice_api_root_username');
+
+  // Delete invoice node settings
+  variable_del('comment_invoice');
+  variable_del('node_preview_invoice');
+  variable_del('node_options_invoice');
+  variable_del('pathauto_node_invoice_pattern');
+
+  // Delete all invoice nodes
+  db_delete('node')->condition('type', 'invoice')->execute();
+
+  // Delete all invoice tables
+  db_drop_table('invoice_customers');
+  db_drop_table('invoice_invoices');
+  db_drop_table('invoice_items');
+  db_drop_table('invoice_templates');
+}
+
+/**
+ * Implementation of hook_schema()
+ *
+ * @return array
+ */
+function invoice_schema() {
+
+  $schema['invoice_customers'] = array(
+    'fields' => array(
+      'cid'              => array('type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE),
+      'customer_number'  => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'company_name'     => array('type' => 'varchar', 'length' => 100, 'not null' => FALSE),
+      'firstname'        => array('type' => 'varchar', 'length' => 50, 'not null' => FALSE),
+      'lastname'         => array('type' => 'varchar', 'length' => 50, 'not null' => FALSE),
+      'street'           => array('type' => 'varchar', 'length' => 100, 'not null' => FALSE),
+      'building_number'  => array('type' => 'varchar', 'length' => 15, 'not null' => FALSE),
+      'zipcode'          => array('type' => 'varchar', 'length' => 25, 'not null' => FALSE),
+      'city'             => array('type' => 'varchar', 'length' => 50, 'not null' => FALSE),
+      'state'            => array('type' => 'varchar', 'length' => 50, 'not null' => FALSE),
+      'country'          => array('type' => 'varchar', 'length' => 50, 'not null' => FALSE),
+      'coc_number'       => array('type' => 'varchar', 'length' => 25, 'not null' => FALSE),
+      'vat_number'       => array('type' => 'varchar', 'length' => 25, 'not null' => FALSE),
+      'description'      => array('type' => 'text', 'not null' => FALSE),
+      'invoice_id'       => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+    ),
+    'primary key'        => array('cid'),
+    'unique keys'        => array(),
+    'indexes' => array(
+      'invoice_id'       => array('invoice_id'),
+      'customer_number'  => array('customer_number'),
+    ),
+  );
+
+  $schema['invoice_invoices'] = array(
+    'fields' => array(
+      'iid'              => array('type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE),
+      'nid'              => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'leading_zeros'    => array('type' => 'int', 'size' => 'tiny', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'prefix'           =>  array('type' => 'varchar', 'length' => 50, 'not null' => FALSE),
+      'description'      => array('type' => 'text', 'not null' => FALSE),
+      'tid'              => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'pay_limit'        => array('type' => 'int', 'size' => 'small', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'pay_status'       => array('type' => 'varchar', 'length' => 10, 'not null' => TRUE, 'default' => 'unpaid'),
+      'uid'              => array('type' => 'int', 'unsigned' => TRUE, 'not null' => FALSE),
+    ),
+    'primary key'        => array('iid'),
+    'unique keys' => array(
+      'nid'             => array('nid'),
+    ),
+    'indexes' => array(
+      'tid'              => array('tid'),
+      'uid'              => array('uid'),
+    ),
+  );
+
+  $schema['invoice_items'] = array(
+    'fields' => array(
+      'iid'              => array('type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE),
+      'description'      => array('type' => 'text', 'size' => 'medium', 'not null' => FALSE),
+      'quantity'         => array('type' => 'float', 'size' => 'big', 'not null' => TRUE, 'default' => 0),
+      'unitcost'         => array('type' => 'float', 'size' => 'big', 'not null' => TRUE, 'default' => 0),
+      'vat'              => array('type' => 'float', 'size' => 'big', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'weight'           => array('type' => 'int', 'size' => 'tiny', 'unsigned' => FALSE, 'not null' => TRUE, 'default' => 0),
+      'invoice_id'       => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'uid'              => array('type' => 'int', 'unsigned' => TRUE, 'not null' => FALSE),
+      'created'          => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+    ),
+    'primary key'        => array('iid'),
+    'unique keys'        => array(),
+    'indexes' => array(
+      'invoice_id'       => array('invoice_id'),
+      'uid'              => array('uid'),
+    ),
+  );
+
+  $schema['invoice_templates'] = array(
+    'fields' => array(
+      'tid'                        => array('type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE),
+      'name'                       => array('type' => 'varchar', 'length' => 100, 'not null' => FALSE),
+      'api_username'               => array('type' => 'varchar', 'length' => 100, 'not null' => FALSE),
+      'locale'                     => array('type' => 'varchar', 'length' => '25', 'not null' => FALSE),
+      'date_format'                => array('type' => 'varchar', 'length' => 50, 'not null' => FALSE),
+      'vat'                        => array('type' => 'float', 'size' => 'big', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'pay_limit'                  => array('type' => 'int', 'size' => 'small', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'supplier_company_name'      => array('type' => 'varchar', 'length' => 100, 'not null' => FALSE),
+      'supplier_street'            => array('type' => 'varchar', 'length' => 100, 'not null' => FALSE),
+      'supplier_building_number'   => array('type' => 'varchar', 'length' => 100, 'not null' => FALSE),
+      'supplier_zipcode'           => array('type' => 'varchar', 'length' => 100, 'not null' => FALSE),
+      'supplier_city'              => array('type' => 'varchar', 'length' => 100, 'not null' => FALSE),
+      'supplier_state'             => array('type' => 'varchar', 'length' => 100, 'not null' => FALSE),
+      'supplier_country'           => array('type' => 'varchar', 'length' => 100, 'not null' => FALSE),
+      'supplier_phone'             => array('type' => 'varchar', 'length' => 100, 'not null' => FALSE),
+      'supplier_fax'               => array('type' => 'varchar', 'length' => 100, 'not null' => FALSE),
+      'supplier_email'             => array('type' => 'varchar', 'length' => 100, 'not null' => FALSE),
+      'supplier_web'               => array('type' => 'varchar', 'length' => 100, 'not null' => FALSE),
+      'supplier_coc_number'        => array('type' => 'varchar', 'length' => 100, 'not null' => FALSE),
+      'supplier_vat_number'        => array('type' => 'varchar', 'length' => 100, 'not null' => FALSE),
+      'display_column_vat'         => array('type' => 'int', 'size' => 'tiny', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'display_column_exunitcost'  => array('type' => 'int', 'size' => 'tiny', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 1),
+      'display_column_incunitcost' => array('type' => 'int', 'size' => 'tiny', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 1),
+      'display_column_extotal'     => array('type' => 'int', 'size' => 'tiny', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 1),
+      'display_column_inctotal'    => array('type' => 'int', 'size' => 'tiny', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 1),
+    ),
+    'primary key' => array('tid'),
+    'unique keys' => array(
+      'name' => array('name'),
+    ),
+    'indexes'     => array(),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_update_N()
+ */
+function invoice_update_7003() {
+  db_change_field('invoice_items', 'weight', 'weight', array('type' => 'int', 'size' => 'tiny', 'unsigned' => FALSE, 'not null' => TRUE, 'default' => 0));
+
+  return t('Successfully set unsigned to false on invoice_items.weight column.');
+}
+
+/**
+ * Implements hook_update_N()
+ */
+function invoice_update_7002() {
+  db_add_field('invoice_templates', 'api_username', array('type' => 'varchar', 'length' => 100, 'not null' => FALSE));
+
+  return t('Successfully added the api template column "api_username".');
+}
+
+/**
+ * Implements hook_update_N()
+ */
+function invoice_update_7001() {
+  db_add_field('invoice_customers', 'state', array('type' => 'varchar', 'length' => 50, 'not null' => FALSE));
+  db_add_field('invoice_templates', 'supplier_state', array('type' => 'varchar', 'length' => 100, 'not null' => FALSE));
+
+  return t('Successfully added the customer and supplier state column.');
+}
+
+/**
+ * Implements hook_update_N()
+ */
+function invoice_update_7000() {
+  _invoice_set_content_type_settings();
+
+  $times = array();
+
+  // Convert datetime data type of "created" column to integer
+  $result = db_query("SELECT iid, created FROM {invoice_items}")->fetchAll();
+  foreach ($result as $row) {
+    $time = strtotime($row->created);
+    $time = $time > 0 ? $time : 0;
+    $times[$row->iid] = $time;
+  }
+
+  db_drop_field('invoice_items', 'created');
+  db_add_field('invoice_items', 'created', array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0));
+
+  foreach ($times as $item_id => $time) {
+    db_update('invoice_items')
+      ->fields(array('created' => $time))
+      ->condition('iid', $item_id)
+      ->execute();
+  }
+
+  return t('Successfully updated the invoice module.');
+}

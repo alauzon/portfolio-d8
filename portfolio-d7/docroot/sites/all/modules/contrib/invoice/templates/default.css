@@ -1,0 +1,192 @@
+/* General */
+.invoice-wrapper {
+  line-height: 100%;
+}
+/* Because dompdf library needs 2x <br /> for a new line, instead of 1x,
+   we don't use <br /> but use with the .break class */
+.invoice-wrapper .break {
+  margin-bottom: 14px;
+}
+.invoice-wrapper,
+.invoice-wrapper td,
+.invoice-wrapper th {
+  font-family: Arial,Helvetica,sans-serif;
+  font-size: 12px;
+  color: #333;
+  padding: 0;
+}
+.invoice-wrapper table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 10px 0 0;
+}
+.invoice-wrapper th {
+  text-align: left;
+  border: 0;
+  border-width: 0;
+}
+.invoice-wrapper tr.even,
+.invoice-wrapper tr.odd,
+.invoice-wrapper tbody th {
+  /*border: 1px solid red;*/
+}
+.invoice-wrapper table tbody,
+.invoice-wrapper table tbody th {
+  border-top: 0;
+}
+.invoice-wrapper .invoice-details {
+  padding-top: 20px;
+  border-bottom: 1px solid #EFEFEF;
+  padding-bottom: 2px;
+}
+.invoice-wrapper table thead td {
+  vertical-align: top;
+}
+.invoice-wrapper table thead td.one {
+  width: 30%;
+  padding-left: 0;
+}
+.invoice-wrapper table thead td.two {
+}
+.invoice-wrapper table thead td.three {
+  width: 30%;
+  padding-right: 0;
+}
+.invoice-links {
+  text-align: left;
+  margin-top: 10px;
+}
+.invoice-wrapper .invoice-items tr td,
+.invoice-wrapper .invoice-items tr th {
+  padding: 4px;
+}
+.invoice-wrapper tr.odd td,
+.invoice-wrapper tr.info td {  
+  background-color: #EFEFEF;
+  border: 0;
+}
+.invoice-wrapper tr.even,
+.invoice-wrapper tr.odd,
+.invoice-wrapper tbody th {
+  border-color: #D3E7F4;
+  border-style: solid;
+  border-width: 0px 0pt;
+  background-color: #FFF;
+}
+.invoice-wrapper h1 {
+  font-size: 22px;
+  margin: 0;
+}
+.invoice-wrapper .invoice-items {
+  margin-top: 20px;  
+}
+.invoice-wrapper .invoice-items td,
+.invoice-wrapper .invoice-items th {
+  text-align: right;  
+} 
+.invoice-wrapper .invoice-items th.description,
+.invoice-wrapper .invoice-items td.description {
+  text-align: left;
+}
+.invoice-wrapper tr {
+  background-color: #FFF;
+}
+.invoice-wrapper tr.total td {
+  border-top: 1px solid #EFEFEF;
+}
+.invoice-wrapper .invoice-totals {
+  margin-top: 20px;
+}
+.invoice-wrapper .invoice-totals td {
+  padding: 0;
+  margin: 0;
+}
+.invoice-wrapper .invoice-totals td.two {
+  width: 25%;
+}
+.invoice-wrapper .invoice-totals td.three {
+  width: 20%;
+  text-align: right;
+}
+.invoice-wrapper .invoice-totals tr.inctotal td {
+  padding-top: 10px;
+  vertical-align: bottom;
+}
+.invoice-wrapper .invoice-totals tr.inctotal td.three div.inctotal {
+  width: 80px;
+  border-top: 1px solid #EFEFEF;
+  font-weight: bold; 
+  margin-left: auto;
+  margin-right: 0;
+  padding-top: 2px;
+}
+.invoice-wrapper .invoice-totals tr.inctotal td.three div.inctotal div.inner {
+  padding-top: 2px;
+}
+.invoice-wrapper .inctotal {
+  font-weight: bold;
+}
+.invoice-wrapper tfoot td {
+  color: #777;
+}
+.invoice-wrapper .invoice-details td {
+  border: 0;
+  padding: 0;
+}
+.invoice-wrapper .invoice-details td,
+.invoice-wrapper .invoice-details tr {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+.invoice-wrapper tfoot td.footer {
+  padding-top: 40px;
+}
+.invoice-wrapper .additional-information {
+  padding-top: 40px;
+}
+.invoice-wrapper .invoice-description,
+.invoice-wrapper .pay-limit {
+  padding-top: 20px;
+}
+.invoice-wrapper .pay-limit {
+  font-weight: bold;
+}
+
+/* Logo */
+#invoice-supplier-logo {
+  width: 248px;
+  height: 64px;
+}
+
+/* Client */
+.invoice-wrapper .client-wrapper {
+  margin-top: 20px;
+}
+
+
+/* Supplier */
+.invoice-wrapper .supplier-wrapper .company-name {
+  font-size: 15px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  padding: 0px;
+  font-weight: bold;
+}
+
+
+/* PDF */
+.pdf {
+  margin-bottom: 20px;
+}
+.pdf .invoice-wrapper,
+.pdf .invoice-wrapper td,
+.pdf .invoice-wrapper th {
+  color: #000;
+}
+.pdf .invoice-wrapper .invoice-details td.one {
+  width: 40%;
+}
+.pdf .invoice-wrapper .invoice-details td.three {
+  width: 25%;
+}

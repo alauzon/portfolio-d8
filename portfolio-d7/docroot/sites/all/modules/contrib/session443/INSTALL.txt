@@ -1,0 +1,20 @@
+
+1) Make sure that HTTPS is working on your site before installing this module.
+   You can lock yourself out of your site if you don't know what you are doing.
+   If you do lock yourself out, see the notes below.
+
+2) Download the module and place the session443 folder into your site's
+   sites/all/modules folder.
+
+3) Enable the module at admin/settings/modules.
+
+Notes:
+
+ * If you happen to lock yourself out of your site with this module, install the
+   drush module: http://drupal.org/project/drush. Then execute the following
+   command from a shell on your server:
+
+   drush disable session443
+
+   Regardless of whether you are having problems or not, if you don't have drush
+   installed, get it. You'll be glad you did.

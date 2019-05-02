@@ -1,0 +1,701 @@
+<?php
+
+/**
+ * @file
+ *
+ * This api renders includes/graph.inc data structures into visual graphs.
+ *
+ * The module makes use of the HTML5 canvas and adds
+ * new HTML tags <edges> and <edge>
+ *
+ * $g['node']['data'] = your data
+ * $g['node']['data']['title'] = simple label
+ * $g['node']['data']['content'] = html contents used for rendering
+ * $g['node']['edges']['node-to']['data'] = your link data
+ */
+
+/**
+ * Creates a new empty graph array.
+ */
+function graphapi_new_graph() {
+  return array();
+}
+
+/**
+ * Adds a graph node to an existing graph array, if it doesn't already exist.
+ *
+ * @param $graph
+ *   Graph array, passed by reference.
+ * @param $id
+ *   Id of the node to add.
+ */
+function graphapi_add_node(&$graph, $id) {
+  if (!isset($graph[$id])) {
+    $graph[$id]['edges'] = array();
+    $graph[$id]['data'] = array();
+    // Set the graph title to the $id, incase it isn't set later.
+    $graph[$id]['data']['title'] = $id;
+  }
+}
+
+/**
+ * Adds data to a graph node.
+ *
+ * @param $graph
+ *   Graph array, passed by reference.
+ * @param $id
+ *   Id of the node to add data to.
+ * @param $data
+ *   Graph node data associative array, containing:
+ *   - 'title': title of the graph node.
+ *   - 'uri': URI of the graph node.
+ *   - 'content': HTML string of body content of the graph node.
+ */
+function graphapi_set_node_data(&$graph, $id, $data) {
+  graphapi_add_node($graph, $id);
+  $current_data = $graph[$id]['data'];
+  // Merge with current data.
+  if (is_array($current_data)) {
+    //  Latest data is more important
+    $data = $data + $current_data;
+  }
+  $graph[$id]['data'] = $data;
+}
+
+/**
+ * Sets the title of a graph node.
+ *
+ * @param $graph
+ *   Graph array, passed by reference.
+ * @param $id
+ *   Id of the node for which to set the title.
+ * @param $title
+ *   Title string.
+ */
+function graphapi_set_node_title(&$graph, $id, $title) {
+  graphapi_add_node($graph, $id);
+  $graph[$id]['data']['title'] = $title;
+}
+
+/**
+ * Sets the uri of a graph node, to which the graph will link.
+ *
+ * @param $graph
+ *   Graph array, passed by reference.
+ * @param $id
+ *   Id of the node for which to set the title.
+ * @param $uri
+ *   URI string.
+ */
+function graphapi_set_node_uri(&$graph, $id, $uri) {
+  graphapi_add_node($graph, $id);
+  $graph[$id]['data']['uri'] = $uri;
+}
+
+/**
+ * Sets the uri of a graph node, to which the graph will link.
+ *
+ * @param $graph
+ *   Graph array, passed by reference.
+ * @param $id
+ *   Id of the node for which to set the title.
+ * @param $content
+ *   HTML string of body content.
+ */
+function graphapi_set_node_content(&$graph, $id, $content) {
+  graphapi_add_node($graph, $id);
+  $graph[$id]['data']['content'] = $content;
+}
+
+/**
+ * Adds a directed edge to the graph.
+ *
+ * @param $graph
+ *   Graph array, passed by reference.
+ * @param $from_id
+ *   Id of the source graph node for the edge.
+ * @param $to_id
+ *   Id of the target graph not for the edge.
+ */
+function graphapi_add_link(&$graph, $from_id, $to_id) {
+  graphapi_add_node($graph, $from_id);
+  graphapi_add_node($graph, $to_id);
+  if (!isset($graph[$from_id]['edges'][$to_id])) {
+    $graph[$from_id]['edges'][$to_id] = array();
+  }
+}
+
+/**
+ * Adds a title to an existing edge in the graph.
+ *
+ * @param $graph
+ *   Graph array, passed by reference.
+ * @param $from_id
+ *   Id of the source graph node for the edge.
+ * @param $to_id
+ *   Id of the target graph not for the edge.
+ * @param $title
+ *   Title string.
+ */
+function graphapi_set_link_title(&$graph, $from_id, $to_id, $title) {
+  graphapi_add_link($graph, $from_id, $to_id);
+  $graph[$from_id]['edges'][$to_id]['title'] = $title;
+}
+
+/**
+ * Adds data to a graph node.
+ *
+ * @param $graph
+ *   Graph array, passed by reference.
+ * @param $from_id
+ *   Id of the source graph node for the edge.
+ * @param $to_id
+ *   Id of the target graph not for the edge.
+ * @param $data
+ *   Graph node data associative array, containing:
+ *   - 'title': title of the graph edge.
+ */
+function graphapi_set_link_data(&$graph, $from_id, $to_id, $data) {
+  graphapi_add_link($graph, $from_id, $to_id);
+  $graph[$from_id]['edges'][$to_id]['data'] = $data;
+}
+
+/**
+ * Returns default graph settings.
+ */
+function graphapi_default_config() {
+  $temp = graphapi_settings_defaults();
+  $result = $temp['settings']['graph'];
+  $result['id'] = 'default';
+
+  return $result;
+}
+
+/**
+ * Provide default setup values
+ *
+ * @return type
+ */
+function graphapi_settings_defaults() {
+  $result = array(
+    'label' => t('Graph'),
+    'settings' => array(
+      'global' => array(
+        'use_global' => FALSE,
+      ),
+      'graph' => array(
+        'animate' => TRUE,
+        'background-color' => 'grey',
+        'height' => '800',
+        'menu' => TRUE,
+        'randomize' => TRUE,
+        'rankType' => 'TopBottom',
+        'rankDepth' => 2,
+        'showLinks' => FALSE,
+        'width' => '800',
+      ),
+      'physics' => array(
+        'showForces' => FALSE,
+        'applyAttractToCenter' => TRUE,
+        'applyBoundingBox' => FALSE,
+        'applyBoxOverlap' => FALSE,
+        'applyCoulombsLaw' => TRUE,
+        'applyDamping' => TRUE,
+        'applyHookesLaw' => TRUE,
+        'applyCompass' => FALSE,
+      ),
+      'links' => array(),
+    ),
+  );
+  return $result;
+}
+
+/**
+ * Renders the HTML for the given graph containing the canvas and divs
+ *
+ * @param $graph
+ *   Graph array.
+ * @param $config
+ *   Graph config array (see graphapi_default_config() for details).
+ */
+function graphapi_container($graph, $config = array()) {
+  $config+= graphapi_default_config();
+  $config['id'] = 'graphapi-' . $config['id'];
+  $config['canvas-id'] = $config['id'] . '-canvas';
+
+  $styles = array(
+    'width' => $config['width'] . 'px',
+    'height' => $config['height'] . 'px',
+    'background-color' => $config['background-color'],
+    '-webkit-user-select' => 'none',
+    '-moz-user-select' => 'none',
+    'overflow' => 'hidden',
+    'position' => 'relative',
+  );
+  $s = '';
+  foreach ($styles as $style => $value) {
+    $s .= "$style: $value; ";
+  }
+  $attributes = array(
+    'id' => $config['id'],
+    'class' => 'graphapi',
+    'style' => $s,
+  );
+  $a = drupal_attributes($attributes);
+  $nl = "\n";
+  $result = '';
+  $result.= '<div ' . $a . '>';
+  $result.= $nl . '<noscript>' . t('This page element requires JavaScript to be enabled.') . '</noscript>';
+  $result.= $nl . theme('graphapi_links', array('graph' => $graph, 'config' => $config));
+  $result.= $nl . '<div class="graphapi-nodes">';
+  $nodes = array();
+  foreach ($graph as $id => $data) {
+    $dom_id = _graphapi_uniform_id($config, $id);
+    if (!(isset($data['data']) && isset($data['data']['title']))) {
+      $data['data']['title'] = $id;
+    }
+    $result .= $nl . theme('graphapi_node', array('dom_id' => $dom_id, 'data' => $data['data'], 'config' => $config));
+  }
+  $result .= $nl . '</div>';
+  $result .= $nl . '</div>';
+  _graphapi_add_graph($graph, $config);
+  return $result;
+}
+
+/**
+ * Implements hook_theme()
+ */
+function graphapi_theme() {
+  return array(
+    'graphapi_container' => array(
+      'variables' => array(
+        'graph' => NULL,
+        'config' => NULL,
+      ),
+    ),
+    'graphapi_links' => array(
+      'variables' => array(
+        'graph' => NULL,
+        'config' => NULL,
+      ),
+    ),
+    'graphapi_node' => array(
+      'variables' => array(
+        'dom_id' => NULL,
+        'data' => NULL,
+        'config' => NULL,
+      ),
+    ),
+    'graphapi_title' => array(
+      'variables' => array(
+        'title' => NULL,
+        'data' => NULL,
+      ),
+    ),
+    'graphapi_link' => array(
+      'variables' => array(
+        'to_id' => NULL,
+        'from_id' => NULL,
+        'title' => NULL,
+        'data' => NULL,
+      ),
+    ),
+    'graphapi_dispatch' => array(
+      'variables' => array(
+        'graph' => NULL,
+        'config' => NULL,
+      ),
+    ),
+    'graphapi_graphviz_filter_graphapi' => array(
+      'variables' => array(
+        'graph' => NULL,
+        'config' => NULL,
+      ),
+    ),
+    'graphapi_raw_data_graphapi' => array(
+      'variables' => array(
+        'graph' => NULL,
+        'config' => NULL,
+      ),
+    ),
+  );
+}
+
+/**
+ * Dispatch the graph to the correct engine
+ * 
+ * @param type $vars
+ * @return type 
+ */
+function theme_graphapi_dispatch($vars) {
+  $engines = graphapi_views_formats();
+  $engine = '';
+  if (isset($vars['config']['engine'])) {
+    $engine = $vars['config']['engine'];
+  }
+  if (isset($engines[$engine])) {
+    $theme = $engine . "_graphapi";
+    return theme($theme, $vars);
+  }
+  else {
+    if (!empty($engine)) {
+      return t("Graph API render engine !engine not found.", array('!engine' => $engine));
+    }
+    else {
+      return t("No Graph API render engines enabled. Check your modules page for a Graph API render engine");
+    }
+  }
+}
+
+/**
+ * Rendering a graph from views
+ * 
+ * @param array $vars 
+ */
+function template_preprocess_views_graphapi_style_graphapi(&$vars) {
+  _views_graphapi_style_build_graph_data($vars);
+  //dsm(func_get_args(), __FUNCTION__);
+  $config = $vars['graph-config'];
+  $vars["xml"] = theme('graphapi_dispatch', array('graph' => $vars['graph'], 'config' => $config));
+}
+
+//TODO: move theme_functions to graph_phyz.module
+
+/**
+ * Theme implementation, returns GraphAPI container as HTML.
+ */
+function theme_graphapi_container($variables) {
+  return graphapi_container($variables['graph'], $variables['config']);
+}
+
+/**
+ * Theme implementation, returns graph title as HTML.
+ */
+function theme_graphapi_title($variables) {
+  $title = $variables['title'];
+  $data = $variables['data'];
+
+  $attributes = array(
+    'class' => 'graphapi-title',
+  );
+  if (isset($data['background-color'])) {
+    $attributes['style'] = 'background-color: ' . $data['background-color'] . ';';
+  }
+  $a = drupal_attributes($attributes);
+
+  if (isset($data['uri'])) {
+    $title = '<a href="' . $data['uri'] . '">' . $title . '</a>';
+  }
+  return '<div ' . $a . '>' . $title . '</div>';
+}
+
+/**
+ * Theme implementation, returns graph node as HTML.
+ */
+function theme_graphapi_node($variables) {
+  $dom_id = $variables['dom_id'];
+  $data = $variables['data'];
+  $config = $variables['config'];
+
+  $attributes = array(
+    'id' => $dom_id,
+    'class' => 'graphapi-node',
+  );
+  // We always add a rank ... all ranks <= 0 are not used for layout
+  $attributes['rank'] = isset($data['rank']) ? $data['rank'] : 0;
+  $a = drupal_attributes($attributes);
+
+  if (isset($data['content'])) {
+    $content = '<div class="graphapi-content" title="' . $data['title'] . '">' . $data['content'] . '</div>';
+  }
+  else {
+    $content = '';
+  }
+  return '<div ' . $a . '>'
+      . theme('graphapi_title', array('title' => $data['title'], 'data' => $data))
+      . $content . '</div>';
+}
+
+/**
+ * Theme implementation, returns graph edge as HTML.
+ */
+function theme_graphapi_link($variables) {
+  $html = '<edge';
+  $html.= ' from="' . $variables['from'] . '"';
+  $html.= ' to="' . $variables['to'] . '"';
+  if (isset($link['data']['type'])) {
+    $html.= ' type="' . $variables['data']['type'] . '"';
+  }
+  if (isset($variables['data']['color'])) {
+    $html.= ' color="' . $variables['data']['color'] . '"';
+  }
+  if (isset($variables['data']['classes'])) {
+    $classes = $variables['data']['classes'];
+    $class = join(" ", $classes);
+    $html.= ' class="' . $class . '"';
+  }
+  $html.= '>';
+  if (isset($variables['title'])) {
+    $html.= '<a href="#" title="' . $variables['title'] . '">&curren;</a>';
+  }
+  $html.='</edge>';
+
+  return $html;
+}
+
+/**
+ * Returns the <edge> canvas node for the given graph.
+ *
+ * @param $graph
+ *   Graph array.
+ * @param $config
+ *   Graph config array (see graphapi_default_config() for details).
+ */
+function theme_graphapi_links($variables) {
+  $graph = $variables['graph'];
+  $config = $variables['config'];
+  $result = '<edges>';
+  foreach ($graph as $from => $data) {
+    foreach ($data['edges'] as $to => $link_data) {
+      $link = array(
+        'from' => _graphapi_uniform_id($config, $from),
+        'to' => _graphapi_uniform_id($config, $to),
+      );
+      if (isset($link_data['title'])) {
+        $link['title'] = $link_data['title'];
+      }
+      if (isset($link_data['data'])) {
+        $link['data'] = $link_data['data'];
+      }
+      $result.= theme('graphapi_link', $link);
+    }
+  }
+  $result.= '</edges>';
+  return $result;
+}
+
+/**
+ * Helper function. Returns unique id for each node id.
+ */
+function _graphapi_uniform_id($config, $id) {
+  return $config['id'] . '-' . md5($id);
+}
+
+/**
+ * Helper function. Adds javascript and css on to drupal pages.
+ */
+function _graphapi_add_graph($graph, $config) {
+  $dom_prefix = $config['id'];
+  $path = drupal_get_path('module', 'graphapi');
+  drupal_add_library('system', 'ui.dialog');
+  drupal_add_library('system', 'ui.draggable');
+  drupal_add_library('system', 'ui.droppable');
+  drupal_add_js($path . '/js/jquery-graphapi.js');
+  drupal_add_js($path . '/js/graphapi.js');
+  drupal_add_css($path . '/css/graphapi.css');
+  $conf = drupal_json_encode($config);
+  $id = '#' . $config['id'];
+  drupal_add_js('jQuery(document).ready( function() {'
+      . "\n" . '  var config = ' . $conf . ';'
+      . "\n" . '  jQuery("' . $id . '").graphapi(config);'
+      . "\n" . '});'
+      , 'inline');
+
+  return;
+}
+
+/**
+ * Reverses all edges on a graph.
+ *
+ * @param $graph
+ *   Graph array.
+ * @param $keep_link_data
+ *   boolean: whether to keep the old link data (not yet implemented).
+ *
+ * @return
+ *   $graph array with edges in opposite direction to original.
+ */
+function graphapi_reverse($graph, $keep_link_data = FALSE) {
+  $result = $graph;
+  foreach ($result as $key => $value) {
+    $result[$key]['edges'] = array();
+  }
+  foreach ($graph as $key => $value) {
+    foreach ($graph[$key]['edges'] as $link => $link_data) {
+      $result[$link]['edges'][$key] = 1;
+    }
+  }
+  return $result;
+}
+
+// TODO move this to graphviz_filter.module
+function graphapi_to_dot($graph) {
+  $dot = array();
+  $dot[] = "digraph {";
+  foreach ($graph as $id => $node) {
+    $dot[] = '  ' . $id . ' [';
+
+    $dot[] = '    label = "' . $node['data']['title'] . '"';
+    $dot[] = '  ]';
+  }
+
+  foreach ($graph as $id => $node) {
+    foreach ($node['edges'] as $eid => $edge) {
+      $dot[] = "  $id -> $eid";
+    }
+  }
+  $dot[] = '}';
+
+  return join("\n", $dot);
+}
+
+function graphapi_views_api() {
+  return array(
+    'api' => 3.0,
+    'path' => drupal_get_path('module', 'graphapi') . '/views',
+  );
+}
+
+/**
+ * Return list of all hook_graphapi_formats
+ */
+function graphapi_views_formats() {
+  return module_invoke_all('graphapi_formats');
+}
+
+/**
+ * Implements hook_graphapi_formats().
+ *
+ * TODO: move to seperate modules
+ */
+function graphapi_graphapi_formats() {
+  return array(
+    'graphapi_graphviz_filter' => 'Graphviz Filter',
+  );
+}
+
+/**
+ * Implements theme_ENGINE_graphapi().
+ */
+function theme_graphapi_graphviz_filter_graphapi($vars) {
+  $config = $vars['config'];
+  return '<xmp>' . graphapi_to_dot($vars['graph']) . '</xmp>';
+}
+
+/**
+ * Provide general settings
+ */
+function graphapi_global_settings_form($values) {
+  $values += array(
+    'width' => 400,
+    'height' => 300,
+    'background-color' => 'yellow',
+  );
+  // This is our 'global' engine
+  $engine = 'graphapi';
+  $form[$engine] = array(
+    '#title' => t('Global settings'),
+    '#type' => 'fieldset',
+    '#collapsed' => FALSE,
+    '#collapsible' => TRUE,
+  );
+  $form[$engine]['width'] = array(
+    '#title' => t('Width'),
+    '#type' => 'textfield',
+    '#default_value' => $values['width'],
+  );
+  $form[$engine]['height'] = array(
+    '#title' => t('Height'),
+    '#type' => 'textfield',
+    '#default_value' => $values['height'],
+  );
+  $form[$engine]['background-color'] = array(
+    '#title' => t('Background color'),
+    '#type' => 'textfield',
+    '#default_value' => $values['background-color'],
+  );
+
+  return $form;
+}
+
+/**
+ * Gathers all relevant settings for all engines
+ *
+ * Each engine form is a fieldset containing it's specific settings
+ * 
+ * Ie width, height, background-color are graphapi settings
+ * Ie show_menu or node_color is engine specific.
+ * 
+ * @see graphapi_global_settings_form().
+ * @see graph_phyz_settings_form().
+ */
+function graphapi_settings_form($form, &$form_state) {
+  $values = $form_state['values'];
+  if (!isset($values['graphapi'])) {
+    $values['graphapi'] = array();
+  }
+
+  $form += graphapi_global_settings_form($values['graphapi']);
+
+  $engines = graphapi_views_formats();
+  $implementations = module_implements('graphapi_settings_form');
+  $order = 1;
+  foreach ($engines as $engine => $title) {
+    if (in_array($engine, $implementations)) {
+      $form += _graphapi_engine_form($engine, $values);
+      $form[$engine]['#weight'] = $order++;
+    }
+    else {
+      $no_settings = array();
+      $no_settings[$engine] = array(
+        '#title' => t('No settings for') . ': ' . $title,
+        '#type' => 'fieldset',
+        '#collapsed' => TRUE,
+        '#collapsible' => FALSE,
+      );
+      $no_settings[$engine]['dummy'] = array(
+        '#markup' => 'The module does not yet support a graphapi settings form. You could check the issue queue for that module.',
+      );
+      $form += $no_settings;
+      $form[$engine]['#weight'] = count($engines);
+    }
+    $form[$engine]['#collapsible'] = TRUE;
+  }
+  return $form;
+}
+
+/**
+ * Helper function to get engine subforms
+ */
+function _graphapi_engine_form($engine, $values) {
+  if (!isset($values[$engine])) {
+    $values[$engine] = array();
+  }
+  $values = $values[$engine];
+  $function = $engine . "_graphapi_settings_form";
+  return call_user_func($function, $values);
+}
+
+function graphapi_demo_engines($engine = 'graph_phyz') {
+  $graph = graphapi_new_graph();
+
+  graphapi_add_link($graph, "graphapi_relation", "relation");
+  graphapi_add_link($graph, "graphapi_relation", "graphapi");
+  graphapi_add_link($graph, "graphapi", "views");
+  graphapi_add_link($graph, "php", "graphapi");
+  graphapi_add_link($graph, "graphapi", "graph_phyz");
+  graphapi_add_link($graph, "graphapi", "graphviz_filter");
+  graphapi_add_link($graph, "graphapi", "thejit");
+  graphapi_add_link($graph, "thejit", "thejit_spacetree");
+  graphapi_add_link($graph, "thejit", "thejit_forcedirected");
+  graphapi_add_link($graph, "thejit", "thejit_x");
+
+  $config = array(
+    'engine' => $engine,
+    'width' => 400,
+    'height' => 300,
+    'background-color' => '#AAA',
+    'duration' => 400,
+  );
+  return theme('graphapi_dispatch', array('graph' => $graph, 'config' => $config));
+}

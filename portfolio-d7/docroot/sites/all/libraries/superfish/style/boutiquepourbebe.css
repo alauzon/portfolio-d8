@@ -1,0 +1,119 @@
+.sf-menu.sf-style-boutiquepourbebe {
+  float: left;
+  padding: 0;
+}
+.sf-menu.sf-style-boutiquepourbebe.sf-navbar {
+  width: 100%;
+}
+.sf-menu.sf-style-boutiquepourbebe ul {
+  padding-left: 0;
+}
+.sf-menu.sf-style-boutiquepourbebe a {
+  padding: 0 16px;
+}
+.sf-menu.sf-style-boutiquepourbebe a,
+.sf-menu.sf-style-boutiquepourbebe a:visited  {
+  color: #FFFFFF;
+  font-size: 12px;
+}
+/*#menu-3569-1 ul {
+  padding-right: 11px !important;
+  width: 11em !important;
+}
+#menu-3569-1 li {
+  padding-left: 15px !important;
+  left: -15px;
+}*/
+.sf-menu.sf-style-boutiquepourbebe a.sf-with-ul {
+  padding-right: 2.25em;
+}
+.sf-menu.sf-style-boutiquepourbebe.rtl a.sf-with-ul {
+  padding-left: 2.25em;
+  padding-right: 1em;
+}
+.sf-menu.sf-style-boutiquepourbebe span.sf-description {
+  color: #FFFFFF;
+  display: block;
+  font-size: 0.8em;
+  line-height: 1.5em;
+  margin: 5px 0 0 5px;
+  padding: 0;
+}
+.sf-menu.sf-style-boutiquepourbebe li,
+.sf-menu.sf-style-boutiquepourbebe.sf-navbar {
+  background: #64564c;
+}
+.sf-menu.sf-style-boutiquepourbebe li li {
+  background: #64564c;
+}
+.sf-menu.sf-style-boutiquepourbebe li li li {
+  background: #64564c;
+}
+.sf-menu.sf-style-boutiquepourbebe li:hover,
+.sf-menu.sf-style-boutiquepourbebe li.sfHover,
+.sf-menu.sf-style-boutiquepourbebe a:focus,
+.sf-menu.sf-style-boutiquepourbebe a:hover,
+.sf-menu.sf-style-boutiquepourbebe a:active {
+  background: #64564c;
+  outline: 0;
+}
+.sf-menu.sf-style-boutiquepourbebe ul.sf-megamenu li.sf-megamenu-wrapper ol,
+.sf-menu.sf-style-boutiquepourbebe ul.sf-megamenu li.sf-megamenu-wrapper ol li {
+  margin: 0;
+  padding: 0;
+}
+.sf-menu.sf-style-boutiquepourbebe ul.sf-megamenu li.sf-megamenu-wrapper a.menuparent {
+  font-weight: bold;
+}
+.sf-menu.sf-style-boutiquepourbebe ul.sf-megamenu li.sf-megamenu-wrapper ol li.sf-megamenu-column {
+  display: inline;
+  float: left;
+  width: 12em;
+}
+.sf-menu.sf-style-boutiquepourbebe.rtl ul.sf-megamenu li.sf-megamenu-wrapper ol li.sf-megamenu-column {
+  float: right;
+}
+.sf-menu.sf-style-boutiquepourbebe li.sf-parent-children-1 ul.sf-megamenu {
+  width: 12em;
+}
+.sf-menu.sf-style-boutiquepourbebe li.sf-parent-children-2 ul.sf-megamenu {
+  width: 24em;
+}
+.sf-menu.sf-style-boutiquepourbebe li.sf-parent-children-3 ul.sf-megamenu {
+  width: 36em;
+}
+.sf-menu.sf-style-boutiquepourbebe li.sf-parent-children-4 ul.sf-megamenu {
+  width: 48em;
+}
+.sf-menu.sf-style-boutiquepourbebe li.sf-parent-children-5 ul.sf-megamenu {
+  width: 60em;
+}
+.sf-menu.sf-style-boutiquepourbebe li.sf-parent-children-6 ul.sf-megamenu {
+  width: 72em;
+}
+.sf-menu.sf-style-boutiquepourbebe li.sf-parent-children-7 ul.sf-megamenu {
+  width: 84em;
+}
+.sf-menu.sf-style-boutiquepourbebe li.sf-parent-children-8 ul.sf-megamenu {
+  width: 96em;
+}
+.sf-menu.sf-style-boutiquepourbebe li.sf-parent-children-9 ul.sf-megamenu {
+  width: 108em;
+}
+.sf-menu.sf-style-boutiquepourbebe li.sf-parent-children-10 ul.sf-megamenu {
+  width: 120em;
+}
+.sf-menu.sf-style-boutiquepourbebe ul,
+.sf-menu.sf-style-boutiquepourbebe ul ul,
+.sf-menu.sf-style-boutiquepourbebe ul ul ul,
+.sf-menu.sf-style-boutiquepourbebe ul ul ul ul,
+.sf-menu.sf-style-boutiquepourbebe li {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.sf-menu.sf-style-boutiquepourbebe li {
+  border-left: 1px solid #fff;
+}
+.sf-menu.sf-style-boutiquepourbebe li.first.menuparent {
+  border: none;
+}

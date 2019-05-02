@@ -1,0 +1,229 @@
+<?php
+
+/**
+ * @file
+ * Tests for EFQ Views query features.
+ */
+
+/**
+ * Abstract class for EFQ views testing.
+ */
+abstract class EFQViewsTestCase extends DrupalWebTestCase {
+  protected $entities_array = array();
+  protected function setUp() {
+    if (module_exists('mongodb')) {
+       variable_set('field_storage_default', 'mongodb_field_storage');
+       parent::setUp('mongodb_field_storage', 'efq_views_test');
+    }
+    else {
+      parent::setUp('efq_views_test');
+    }
+    $field = array(
+      'field_name' => 'field_boolean',
+      'type' => 'list_boolean',
+    );
+    $field['settings']['allowed_values'] = array('Off', 'On');
+    field_create_field($field);
+    $instance = array (
+      'field_name' => 'field_boolean',
+      'entity_type' => 'efq_views_test',
+      'bundle' => 'bundle1',
+      'label' => 'field boolean',
+    );
+    field_create_instance($instance);
+    // Load the test dataset.
+    foreach ($this->entities_array as $key => $entity_array) {
+      $entity = entity_create('efq_views_test', $entity_array);
+      entity_save('efq_views_test', $entity);
+      $this->assertFalse(empty($entity->eid), 'Entity saved');
+      $this->entities[$key] = $entity;
+    }
+  }
+  protected function view() {
+    $view = new view();
+    $view->base_table = 'efq_efq_views_test';
+    /* Display: Master */
+    $handler = $view->new_display('default');
+    $handler->display->display_options['row_options']['default_field_elements'] = FALSE;
+    $fields = array(
+      'entity_id',
+      'eid',
+      'language',
+      'test_boolean',
+      'test_date',
+      'test_decimal',
+      'test_duration',
+      'test_integer',
+      'test_text',
+      'uid',
+      'url',
+      'field_boolean',
+    );
+    foreach ($fields as $field) {
+      $handler->display->display_options['fields'][$field] = array (
+        'id' => $field,
+        'field' => $field,
+        'table' => 'efq_efq_views_test',
+      );
+    }
+    return $view;
+  }
+
+  protected function runView($view = NULL) {
+    if (!isset($view)) {
+      $view = $this->view();
+    }
+    $content = $view->preview();
+    $this->verbose($content);
+    $this->drupalSetContent($content);
+  }
+}
+
+class EFQViewsFieldTestCase extends EFQViewsTestCase {
+  function getInfo() {
+    return array(
+      'name' => 'EFQ Views fields',
+      'description' => 'Tests EFQ Views field handlers',
+      'group' => 'EFQ Views',
+    );
+  }
+  protected $entities_array = array(
+    array(
+      'bundle' => 'bundle1',
+      'label' => 'test label 1',
+      'uid' => 1,
+      'test_boolean' => TRUE,
+      'test_integer' => 15,
+      'test_decimal' => 78,
+      'test_duration' => 900,
+      'test_date' => 1336236850,
+      'test_text' => 'test text',
+      'field_boolean' => array(LANGUAGE_NONE => array(array('value' => 1))),
+    ),
+    array(
+      'bundle' => 'bundle1',
+      'label' => 'test label 1',
+      'uid' => 1,
+      'test_boolean' => FALSE,
+      'test_integer' => 17,
+      'test_decimal' => 80,
+      'test_duration' => 1500,
+      'test_date' => 1336366325,
+      'test_text' => 'another test text',
+      'field_boolean' => array(LANGUAGE_NONE => array(array('value' => 0))),
+    ),
+  );
+
+  function testBasic() {
+    $this->runView();
+    $entity = $this->entities[0];
+    $this->assertPattern("/Entity ID: +$entity->eid/", 'Entity ID found');
+    $this->assertPattern("/Efq views test ID: +$entity->eid/", 'Entity ID (meta) found');
+    $this->assertPattern("/Test_boolean: +Yes/", 'Boolean found');
+    $this->assertPattern('/Test_decimal: +' . ($entity->test_decimal / 100) . '/', 'Decimal found');
+    $this->assertPattern('/Test_date: +' . preg_quote(format_date($entity->test_date), '/') . '/', 'Date found');
+    $this->assertPattern('/Test_text: +test text/', 'Test text found');
+    $url = url("custom/$entity->uid", array('absolute' => TRUE));
+    $this->assertPattern('/URL: +' . preg_quote(l($url, $url), '/') . '/', 'URL found');
+    $this->assertPattern('/field boolean: +On/', 'Boolean field API field found');
+  }
+
+  function testFilters() {
+    // Boolean property.
+    foreach (array('1', '0') as $key => $value) {
+      $view = $this->view();
+      $handler = $view->display['default']->handler;
+      $handler->display->display_options['filters']['test_boolean']['id'] = 'test_boolean';
+      $handler->display->display_options['filters']['test_boolean']['table'] = 'efq_efq_views_test';
+      $handler->display->display_options['filters']['test_boolean']['field'] = 'test_boolean';
+      $handler->display->display_options['filters']['test_boolean']['value'] = $value;
+      $this->runView($view);
+      $this->assertEqual(count($view->result), 1);
+      $entity = $this->entities[$key];
+      $this->assertPattern("/Entity ID: +$entity->eid/", 'Entity ID found');
+    }
+    // Integer property. Tests are: value, operator, entity keys to be found.
+    $tests = array(
+      array('15', '=', 0),
+      array('16', '='),
+      array('15', '>', 1),
+      array('15', '<'),
+      array('15', '<=', 0),
+      array('15', '>=', 0, 1),
+      array('15', '<>', 1),
+      array('17', '<', 0),
+      array('17', '<=', 0, 1),
+      array(array('16', '17'), 'BETWEEN', 1),
+      array(array('12', '18'), 'BETWEEN', 0, 1),
+    );
+    foreach ($tests as $test) {
+      $value = array_shift($test);
+      if (is_scalar($value)) {
+        $value = array('value' => $value);
+      }
+      else {
+        $value = array('min' => $value[0], 'max' => $value[1]);
+      }
+      $operator = array_shift($test);
+      $this->pass(strtr("test @value $operator", array('@value' => implode(' ', $value))));
+      $view = $this->view();
+      $handler = $view->display['default']->handler;
+      $handler->display->display_options['filters']['test_integer']['id'] = 'test_integer';
+      $handler->display->display_options['filters']['test_integer']['table'] = 'efq_efq_views_test';
+      $handler->display->display_options['filters']['test_integer']['field'] = 'test_integer';
+      $handler->display->display_options['filters']['test_integer']['operator'] = $operator;
+      $handler->display->display_options['filters']['test_integer']['value'] = $value;
+      $this->runView($view);
+      $this->assertEqual(count($view->result), count($test));
+      foreach ($test as $key) {
+        $entity = $this->entities[$key];
+        $this->assertPattern("/Entity ID: +$entity->eid/", 'Entity ID found');
+      }
+    }
+    // Integer-stored list boolean.
+    foreach (array('1', '0') as $key => $value) {
+      $view = $this->view();
+      $handler = $view->display['default']->handler;
+      $handler->display->display_options['filters']['field_boolean']['id'] = 'field_boolean';
+      $handler->display->display_options['filters']['field_boolean']['table'] = 'efq_efq_views_test';
+      $handler->display->display_options['filters']['field_boolean']['field'] = 'field_boolean';
+      $handler->display->display_options['filters']['field_boolean']['value'] = array($value);
+      $this->runView($view);
+      $this->assertEqual(count($view->result), 1);
+      $entity = $this->entities[$key];
+      $this->assertPattern("/Entity ID: +$entity->eid/", 'Entity ID found');
+    }
+  }
+}
+
+class EFQViewsNodeLinkTestCase extends EFQViewsTestCase {
+   function getInfo() {
+    return array(
+      'name' => 'EFQ Views node link',
+      'description' => 'Tests EFQ Views sees a Views-defined special field.',
+      'group' => 'EFQ Views',
+    );
+  }
+
+  function view() {
+    $view = new view();
+    $view->base_table = 'efq_node';
+    /* Display: Master */
+    $handler = $view->new_display('default');
+    /* Field: Node: Edit link */
+    $handler->display->display_options['fields']['edit_node']['id'] = 'edit_node';
+    $handler->display->display_options['fields']['edit_node']['table'] = 'views_entity_node';
+    $handler->display->display_options['fields']['edit_node']['field'] = 'edit_node';
+    return $view;
+  }
+
+  function testNodeLink() {
+    $node = $this->drupalCreateNode();
+    $account = $this->drupalCreateUser(array('bypass node access'));
+    $this->drupalLogin($account);
+    $this->runView();
+    $this->assertRaw('Edit link:');
+    $this->clickLink('edit');
+    $this->assertFieldByName('title', $node->title);
+  }
+}

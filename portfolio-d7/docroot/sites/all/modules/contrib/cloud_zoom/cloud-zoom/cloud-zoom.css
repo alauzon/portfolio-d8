@@ -1,0 +1,79 @@
+
+/* This is the moving lens square underneath the mouse pointer. */
+.cloud-zoom-lens {
+	border: 4px solid #888;
+	margin:-4px;	/* Set this to minus the border thickness. */
+	background-color:#fff;	
+	cursor:move;		
+}
+
+/* This is for the title text. */
+.cloud-zoom-title {
+	font-family:Arial, Helvetica, sans-serif;
+	position:absolute !important;
+	background-color:#000;
+	color:#fff;
+	padding:3px;
+	width:100%;
+	text-align:center;	
+	font-weight:bold;
+	font-size:10px;
+	top:0px;
+}
+
+/* This is the zoom window. */
+.cloud-zoom-big {
+	border:4px solid #ccc;
+	overflow:hidden;
+}
+
+/* This is the loading message. */
+.cloud-zoom-loading {
+	color:white;	
+	background:#222;
+	padding:3px;
+	border:1px solid #000;
+}
+
+div#zoom-img-wrapper {
+  position: absolute;
+  top: 0px;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+div#zoom-img-wrapper.popup {
+  left: 75%;
+  width: 400px;
+  height: 300px;    
+  border: 5px solid #000;
+  background: #fff;
+}
+
+div#zoom-img-wrapper.inner {
+  left: 0px;
+}
+
+img#zoom-img {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+#cloud-zoom-thumb-wrapper .cloud-zoom-thumb {
+  float: left;
+  padding: 5px 5px 0px 0px;
+}
+
+#cloud-zoom-thumb-wrapper .cloud-zoom-thumb-hide {
+  display: none;
+}
+
+.zoom-img-title {
+  position: absolute;
+  width: 100%;
+  background: #000;
+  color: #fff;
+  padding-left: 5px;
+}
+

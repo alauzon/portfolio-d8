@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Provides uninstall functions for the Cloud Zoom module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function cloud_zoom_uninstall() {
+  // delete variables created by settings form
+  variable_del('cloud_zoom_zoom_type');
+  variable_del('cloud_zoom_multiple_thumbs');
+  variable_del('cloud_zoom_hide_active_thumb');
+  variable_del('cloud_zoom_display_title');
+  variable_del('cloud_zoom_load_all');
+  variable_del('cloud_zoom_load_all_types');
+}

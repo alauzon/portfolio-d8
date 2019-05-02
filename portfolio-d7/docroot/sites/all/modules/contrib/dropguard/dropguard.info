@@ -1,0 +1,11 @@
+name = Drop Guard
+description = Provides integration with the Drop Guard service to automate Drupal updates.
+core = 7.x
+configure = admin/config/services/dropguard
+
+; Information added by Drupal.org packaging script on 2018-03-13
+version = "7.x-1.3"
+core = "7.x"
+project = "dropguard"
+datestamp = "1520940486"
+

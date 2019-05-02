@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * Implementaton of hook_install
+ */
+function mec_lang_link_install() {
+  drupal_set_message(t("<b>Mécanicad language switcher link</b> is installed successfully.<br />Please refer to README.txt for help in configuration."));
+}
+
+/**
+ * Implementaton of hook_uninstall
+ */
+function mec_lang_link_uninstall() {
+  db_query("DELETE FROM {variable} WHERE name = 'mec_lang_link'");
+  db_query("DELETE FROM {system} WHERE name = 'mec_lang_link'");
+}

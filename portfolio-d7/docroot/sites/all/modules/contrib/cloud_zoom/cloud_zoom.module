@@ -1,0 +1,349 @@
+<?php
+// $Id: cloud_zoom.module,v 1.3 2010/06/04 21:00:25 njt1982 Exp $
+
+/**
+ * @file
+ * This module integrates the Cloud Zoom JQuery library from:
+ * http://www.professorcloud.com/mainsite/cloud-zoom.htm
+ */
+
+
+/**
+ * Implementation of hook_requirements().
+ */
+function cloud_zoom_requirements($phase) {
+  if ($phase == 'runtime') {
+    $files_present = _cloud_zoom_files_present();
+
+    return array(
+      'cloud_zoom_sourcefiles' => array(
+        'title' => t('Cloud Zoom - Sourcecode downloaded and present'),
+        'value' => $files_present ? t('Files Present') : t('Files Missing'),
+        'description' => $files_present ? NULL : t('Have the sourcecode files for Cloud Zoom been downloaded from <a href="http://www.professorcloud.com/mainsite/cloud-zoom.htm">Professor Cloud</a>'),
+        'severity' => $files_present ? REQUIREMENT_OK : REQUIREMENT_ERROR,
+      ),
+    );
+  }
+}
+
+
+/**
+ * Internal Helper function to check if the required source code is present
+ */
+function _cloud_zoom_files_present() {
+  $path = drupal_get_path('module', 'cloud_zoom');
+  return (file_exists($path .'/cloud-zoom/cloud-zoom.1.0.2.min.js') && file_exists($path .'/cloud-zoom/cloud-zoom.css'));
+}
+
+/**
+ * Implements hook_menu().
+ */
+function cloud_zoom_menu() {
+  $items['admin/config/media/cloud_zoom'] = array(
+    'title' => 'Cloud Zoom',
+    'description' => 'Configure settings for the Image Zoom field formatter.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('cloud_zoom_settings_form'),
+    'access arguments' => array('Administer image styles'),
+    'file' => 'cloud_zoom.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_field_formatter().
+ */
+function cloud_zoom_field_formatter_info() {
+  $formatters = array(
+    'cloud_zoom' => array(
+      'label' => t('Cloud Zoom'),
+      'field types' => array('image'),
+      'settings' => array(
+        'cloud_zoom_display_style' => '',
+        'cloud_zoom_zoom_style' => '',
+        'cloud_zoom_thumb_style' => '',
+      ),
+    ),
+  );
+
+  return $formatters;
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function cloud_zoom_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $image_styles = image_style_options(FALSE);
+  $element['cloud_zoom_display_style'] = array(
+    '#type' => 'select',
+    '#title' => t('Display image style'),
+    '#options' => $image_styles,
+    '#empty_option' => t('None (original image)'),
+    '#default_value' => $settings['cloud_zoom_display_style'],
+  );
+
+  $element['cloud_zoom_zoom_style'] = array(
+    '#type' => 'select',
+    '#title' => t('Zoomed image style'),
+    '#options' => $image_styles,
+    '#empty_option' => t('None (original image)'),
+    '#default_value' => $settings['cloud_zoom_zoom_style'],
+  );
+
+  if (variable_get('cloud_zoom_multiple_thumbs', 0)) {
+    $element['cloud_zoom_thumb_style'] = array(
+      '#type' => 'select',
+      '#title' => t('Thumbnail image style'),
+      '#options' => $image_styles,
+      '#empty_option' => t('None (original image)'),
+      '#default_value' => $settings['cloud_zoom_thumb_style'],
+    );
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function cloud_zoom_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $summary = array();
+
+  $image_styles = image_style_options(FALSE);
+  // Unset possible 'No defined styles' option.
+  unset($image_styles['']);
+  // Styles could be lost because of enabled/disabled modules that define
+  // their styles in code.
+  $summary[] = t('Display image style: @style', array(
+    '@style' => isset($image_styles[$settings['cloud_zoom_display_style']]) ?
+    $image_styles[$settings['cloud_zoom_display_style']] : 'original',
+  ));
+  $summary[] = t('Zoomed image style: @style', array(
+    '@style' => isset($image_styles[$settings['cloud_zoom_zoom_style']]) ?
+    $image_styles[$settings['cloud_zoom_zoom_style']] : 'original',
+  ));
+  if (variable_get('cloud_zoom_multiple_thumbs', 0)) {
+    $summary[] = t('Thumbnail image style: @style', array(
+      '@style' => isset($image_styles[$settings['cloud_zoom_thumb_style']]) ?
+      $image_styles[$settings['cloud_zoom_thumb_style']] : 'original',
+    ));
+  }
+
+  return implode('<br />', $summary);
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function cloud_zoom_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $display_style = $display['settings']['cloud_zoom_display_style'];
+  $zoom_style = $display['settings']['cloud_zoom_zoom_style'];
+  $thumb_style = isset($display['settings']['cloud_zoom_thumb_style']) ? $display['settings']['cloud_zoom_thumb_style'] : NULL;
+
+  $element = array();
+  if (count($items) > 1) {
+    if (variable_get('cloud_zoom_multiple_thumbs', 0)) {
+      $element = array(
+        '#theme' => 'cloud_zoom_image_multiple',
+        '#items' => $items,
+        '#display_style' => $display_style,
+        '#zoom_style' => $zoom_style,
+        '#thumb_style' => $thumb_style,
+      );
+    }
+    else {
+      foreach ($items as $delta => $item) {
+        $element[$delta] = array(
+          '#theme' => 'cloud_zoom_image',
+          '#item' => $item,
+          '#display_style' => $display_style,
+          '#zoom_style' => $zoom_style,
+        );
+      }
+    }
+  }
+  elseif (!empty($items)) {
+    $element = array(
+      '#theme' => 'cloud_zoom_image',
+      '#item' => $items[0],
+      '#display_style' => $display_style,
+      '#zoom_style' => $zoom_style,
+    );
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function cloud_zoom_theme() {
+  return array(
+    'cloud_zoom_image' => array(
+      'variables' => array(
+        'item' => NULL,
+        'display_style' => NULL,
+        'zoom_style' => NULL,
+      ),
+    ),
+    'cloud_zoom_image_multiple' => array(
+      'variables' => array(
+        'items' => NULL,
+        'display_style' => NULL,
+        'zoom_style' => NULL,
+        'thumb_style' => NULL,
+      ),
+    ),
+  );
+}
+
+/**
+ * Returns the HTML code for an image with a zoomed version on mouseover.
+ */
+function theme_cloud_zoom_image_multiple($variables) {
+  
+  //if (!variable_get('cloud_zoom_load_all', 0)) {
+    $display_title = variable_get('cloud_zoom_display_title', 0);
+    $hide_thumbs = variable_get('cloud_zoom_hide_active_thumb', 0);
+    /*drupal_add_js(drupal_get_path('module', 'cloud_zoom') . '/js/cloud_zoom.min.js');
+    $settings = array(
+      'zoom_type' => variable_get('cloud_zoom_zoom_type', 'popup'),
+      'display_title' => $display_title,
+      'hide_thumbs' => $hide_thumbs,
+    );
+    drupal_add_js(array('cloud_zoom' => $settings), 'setting');
+    drupal_add_css(drupal_get_path('module', 'cloud_zoom') . '/css/cloud_zoom.css');*/
+    
+    // Add the cloud zoom JS and CSS
+    drupal_add_js(drupal_get_path('module', 'cloud_zoom') .'/cloud-zoom/cloud-zoom.1.0.2.js');
+    drupal_add_css(drupal_get_path('module', 'cloud_zoom') .'/cloud-zoom/cloud-zoom.css');
+  //}
+
+  $items = $variables['items'];
+  $output = "\n".'<div class="zoom-section">'."\n";
+
+  $image = array(
+    'path' => $items[0]['uri'],
+    'alt' => $items[0]['alt'],
+  );
+
+  // Do not output an empty 'title' attribute.
+  if (drupal_strlen($items[0]['title']) > 0) {
+    $image['title'] = $items[0]['title'];
+  }
+
+  $main_img = '';
+  if ($variables['display_style']) {
+    $image['style_name'] = $variables['display_style'];
+    $main_img = theme('image_style', $image);
+  }
+  else {
+    $main_img = theme('image', $image);
+  }
+
+  $zoom_img = '';
+  if ($variables['zoom_style']) {
+    $image['style_name'] = $variables['zoom_style'];
+    $zoom_img = image_style_url($variables['zoom_style'], $items[0]['uri']);
+  }
+  else {
+    $zoom_img = file_create_url($image['path']);
+  }
+
+  $output .= '<div class="zoom-small-image">'."\n";
+  $output .= l($main_img, $zoom_img, array(
+    'html' => TRUE,
+    'attributes' => array('class' => 'cloud-zoom', 'id' => 'zoom1', 'rel' => "adjustX: 10, adjustY:-4"),
+  ))."\n";
+  $output .= '</div>'."\n";
+
+  $output .= '<div class="zoom-desc">'."\n";
+  foreach ($items as $key => $item) {
+    $image = array(
+      'path' => $item['uri'],
+      'alt' => $item['alt'],
+    );
+
+    // Do not output an empty 'title' attribute.
+    if (drupal_strlen($item['title']) > 0) {
+      $image['title'] = $item['title'];
+    }
+    
+    $main_img = '';
+    if ($variables['display_style']) {
+      $main_img_url = image_style_url($variables['display_style'], $item['uri']);
+    }
+    else {
+      $main_img_url = theme('image', $image);
+    }
+
+    $image['style_name'] = 'thumbnail';
+    $image['attributes'] = array('class' => 'zoom-tiny-image');
+    $thumb = theme('image_style', $image);
+
+    $classes = array('cloud-zoom-gallery');
+    $hide = '';
+    if ($key == 0) {
+      $classes[] = 'active';
+      if ($hide_thumbs) {
+        $hide = ' cloud-zoom-thumb-hide';
+      }
+    }
+
+    $big_img_url = image_style_url('large', $item['uri']);
+    $small_img_url = image_style_url('tres-large', $item['uri']);
+
+    $thumb = l($thumb, $small_img_url, array(
+      'html' => TRUE,
+      'attributes' => array('class' => $classes, 'rel' => "useZoom: 'zoom1', smallImage: '$big_img_url' "),
+    ));
+
+    $output .= '<div class="zoom-item ' . $hide . '">' . $thumb . '</div>'."\n";
+  }
+  $output .= '</div>'."\n";
+  $output .= '</div>'."\n";
+
+  return $output;
+}
+
+
+/**
+ * Theme handler for the cloud_zoom effect
+ */
+function theme_cloud_zoom_image($variables) {
+  $variables['items'] = array($variables['item']);
+  return(theme_cloud_zoom_image_multiple($variables));
+  // Add the cloud zoom JS and CSS
+  /*drupal_add_js(drupal_get_path('module', 'cloud_zoom') .'/cloud-zoom/cloud-zoom.1.0.2.min.js');
+  drupal_add_css(drupal_get_path('module', 'cloud_zoom') .'/cloud-zoom/cloud-zoom.css');
+
+  $item = $variables['item'];
+
+  $image = array(
+    'path' => $item['uri'],
+    'alt' => $item['alt'],
+    'style_name' => $variables['view_preset'],
+  );
+
+  // Do not output an empty 'title' attribute.
+  if (drupal_strlen($item['title']) > 0) {
+    $image['title'] = $item['title'];
+  }
+
+  // Theme the preview image using an image style
+  $small = theme('image_style', $image);
+
+  // Build a Zoomed In URL path
+  $zoomed = image_style_url($variables['zoom_preset'], $item['uri']);
+  $zoomed = file_create_url($zoomed);
+
+  // Return the preview image as a link to the larger image with a cloud-zoom CSS class
+  return l($small, $zoomed, array('html' => TRUE, 'attributes' => array('class' => 'cloud-zoom')));*/
+}

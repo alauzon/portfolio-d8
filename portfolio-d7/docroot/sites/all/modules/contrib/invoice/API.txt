@@ -1,0 +1,52 @@
+Example data:
+
+GET URI (replace 999 with invoice ID / number):
+/invoice/api/invoice.json/999
+/invoice/api/invoice.html/999
+/invoice/api/invoice.pdf/999
+
+POST URI:
+/invoice/api/invoice.json
+
+PUT URI (replace 999 with invoice ID / number):
+/invoice/api/invoice.json/999
+
+POST or PUT body
+
+{
+    "leading_zeros": "4",
+    "prefix": "%Y",
+    "description": "This is the invoice description",
+    "template": "default",
+    "pay_limit": 0,
+    "pay_status": "paid",
+    "customer": {
+        "customer_number": 1,
+        "company_name": "Awesome company",
+        "firstname": "John",
+        "lastname": "Doe",
+        "street": "Example street",
+        "building_number": 1,
+        "zipcode": "1234 AB",
+        "city": "Amsterdam",
+        "state": "Noord-Holland",
+        "country": "Nederland",
+        "coc_number": 12345678,
+        "vat_number": "NL012345678B01",
+        "description": "Best company ever!"
+    },
+    "items": [
+        {
+            "description": "Subscription 01-01-2012 t/m 31-12-2012",
+            "quantity": "1",
+            "unitcost": "50.75",
+            "vat": "21"
+        },
+        {
+            "description": "Sent SMS messages",
+            "quantity": "28",
+            "unitcost": "0.22",
+            "vat": "21"
+        }
+    ]
+}

@@ -1,0 +1,166 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the brilliant_gallery module.
+ *
+ */
+
+
+// Helpful guide: http://drupal.org/node/150215
+
+/**
+ * Implements hook_schema().
+ */
+function brilliant_gallery_schema() {
+
+  $schema['brilliant_gallery_checklist'] = array(
+    'description' => 'Table tracing which Brilliant Gallery images are hidden or visible.',
+    'fields' => array(
+      'nid' => array(
+        'description' => 'Unused now.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'user' => array(
+        'description' => 'User ID.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'qid' => array(
+        'description' => 'Image.',
+        'type' => 'text',
+        'not null' => TRUE,
+      ),
+      'state' => array(
+        'description' => 'Visible or invisible.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('nid', 'user', array('qid', 255)),
+  );
+
+  $schema['brilliant_gallery_image_arrays'] = array(
+    'description' => 'Binds image property array with its hash that is present in the cached file name and in the URL.',
+    'fields' => array(
+      'hash' => array(
+        'description' => 'Hash of the serialized array.',
+        'type' => 'varchar',
+        'length' => '32',
+        'not null' => TRUE,
+      ),
+      'array' => array(
+        'description' => 'Array of image parametres.',
+        'type' => 'text',
+        'not null' => TRUE,
+      ),
+      'datetime' => array(
+        'description' => 'Date and time of last value refresh.',
+        'mysql_type' => 'datetime',
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('hash'),
+    'indexes' => array(
+      'datetime' => array('datetime'),
+    ),
+  );
+
+  return $schema;
+}
+
+
+/**
+ * Implements hook_update_N().
+ */
+function brilliant_gallery_update_6001() {
+  $ret = array();
+
+  $schema['brilliant_gallery_checklist'] = array(
+    'description' => t('Table tracing which Brilliant Gallery images are hidden or visible.'),
+    'fields' => array(
+      'nid' => array(
+        'description' => t('Unused now.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'size' => 'normal',
+        'default' => 0,
+      ),
+      'user' => array(
+        'description' => t('User ID.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'size' => 'normal',
+        'default' => 0,
+      ),
+      'qid' => array(
+        'description' => t('Image.'),
+        'type' => 'text',
+        #'unsigned' => FALSE,
+        'not null' => TRUE,
+        'size' => 'normal',
+        #'default' => '',    # brilliant_gallery_checklist.qid is type text and may not have a default value
+      ),
+      'state' => array(
+        'description' => t('Visible or invisible.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'size' => 'normal',
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('nid', 'user', array('qid', 255)),
+  );
+  db_create_table('brilliant_gallery_checklist', $schema['brilliant_gallery_checklist']);
+
+  // hook_update_N() no longer returns a $ret array. Instead, return
+  // nothing or a translated string indicating the update ran successfully.
+  // See http://drupal.org/node/224333#update_sql.
+  return t('Executed brilliant_gallery_update_6001.') /* $ret */;
+}
+
+/**
+ * @todo Please document this function.
+ * @see http://drupal.org/node/1354
+ */
+function brilliant_gallery_update_6003() {
+  $ret = array();
+
+  $schema['brilliant_gallery_image_arrays'] = array(
+    'description' => t('Binds image property array with its hash that is present in the cached file name and in the URL.'),
+    'fields' => array(
+      'hash' => array(
+        'description' => t('Hash of the serialized array.'),
+        'type' => 'varchar',
+        'length' => '32',
+        'not null' => TRUE,
+      ),
+      'array' => array(
+        'description' => t('Array of image parametres.'),
+        'type' => 'text',
+        'not null' => TRUE,
+      ),
+      'datetime' => array(
+        'description' => t('Date and time of last value refresh.'),
+        'mysql_type' => 'datetime',
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('hash'),
+    'indexes' => array(
+      'datetime' => array('datetime'),
+    ),
+  );
+  db_create_table('brilliant_gallery_image_arrays', $schema['brilliant_gallery_image_arrays']);
+
+  // hook_update_N() no longer returns a $ret array. Instead, return
+  // nothing or a translated string indicating the update ran successfully.
+  // See http://drupal.org/node/224333#update_sql.
+  return t('Executed brilliant_gallery_update_6003.') /* $ret */;
+}

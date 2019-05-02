@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * Implements hook_boxes_plugins().
+ */
+function field_boxes_boxes_plugins() {
+  $info = array();
+  $path = drupal_get_path('module', 'field_boxes') . '/plugins';
+  $info['field'] = array(
+    'title' => 'Field Box',
+    'handler' => array(
+      'parent' => 'box',
+      'class' => 'boxes_field',
+      'file' => 'boxes_field.inc',
+      'path' => $path,
+    ),
+  );
+  return $info;
+}
+function field_boxes_bundle($form, $form_state) {
+  $keys = isset($form_state['triggering_element']['#ajax']['replace with']) ?
+    $form_state['triggering_element']['#ajax']['replace with']:
+    array();
+  $return = $form['options']['entity'];
+  foreach($keys as $key) {
+    $return = $return[$key];
+  }
+  return $return;;
+}
+

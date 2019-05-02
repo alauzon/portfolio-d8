@@ -1,0 +1,15 @@
+; $Id:
+name = Isotope
+description = Create reusable Isotope configurations.
+package = User interface
+core = 7.x
+configure = admin/config/user-interface/isotope
+
+dependencies[] = ctools
+
+; Information added by Drupal.org packaging script on 2016-04-08
+version = "7.x-2.0"
+core = "7.x"
+project = "isotope"
+datestamp = "1460111946"
+

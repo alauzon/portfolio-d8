@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * @file
+ * Installation functions for Image Matrix module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function imagematrix_install() {
+  // Create new image style "imagematrix".
+  $style = image_style_save(array('name' => 'imagematrix'));
+  // Add efect "Scale and crop" (1x1) to the new style
+  $effect = image_effect_definition_load('image_scale_and_crop');
+  $effect['isid'] = $style['isid'];
+  $effect['data'] = array('width' => 1, 'height' => 1);
+  image_effect_save($effect);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function imagematrix_uninstall() {
+  // Delete "imagematrix" image style.
+  $style = image_style_load('imagematrix');
+  image_style_delete($style);
+}

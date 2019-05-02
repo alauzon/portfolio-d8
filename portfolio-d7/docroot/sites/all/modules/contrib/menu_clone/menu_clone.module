@@ -1,0 +1,83 @@
+<?php
+
+/**
+ * Implements hook_permission().
+ */
+function menu_clone_permission() {
+  return array('access menu clone' => array(
+    'title' => t('Access menu clone'),
+  ));
+}
+
+/**
+ * Implements hook_menu().
+ */
+function menu_clone_menu() {
+  $items = array();
+  $items['admin/structure/menu/manage/%menu_clone/clone'] = array(
+    'title' => 'Clone menu',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('menu_clone_clone_form', 4),
+    'access arguments' => array('access menu clone'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'includes/menu_clone.admin.inc',
+    'weight' => 20,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function menu_clone_theme() {
+  return array(
+    'menu_clone_clone_form' => array(
+      'render element' => 'form',
+      'file' => 'includes/menu_clone.admin.inc',
+    ),
+  );
+}
+
+/**
+ * Implements hook_load().
+ */
+function menu_clone_load($menu_name) {
+  global $menu_admin;
+
+  $menu = db_query("SELECT * FROM {menu_custom} WHERE menu_name = :menu_name", array(':menu_name' => $menu_name))->fetchAssoc();
+
+  if (strpos($menu['menu_name'], 'menu-') === 0) {
+    $menu['menu_name'] = drupal_substr($menu['menu_name'], 5);
+  }
+
+  $new_name = drupal_substr('clone-' . $menu['menu_name'], 0, MENU_MAX_MENU_NAME_LENGTH_UI);
+  $sql = "SELECT menu_name FROM {menu_custom} WHERE menu_name = :menu_name";
+  $result = db_query($sql, array(':menu_name' => 'menu-' . $new_name))->fetchField();
+  $i = 1;
+  while (!empty($result)) {
+    $new_name = drupal_substr('clone' . $i . '-' . $menu['menu_name'], 0, MENU_MAX_MENU_NAME_LENGTH_UI);
+    $result = db_query($sql, array(':menu_name' => 'menu-' . $new_name))->fetchField();
+    $i++;
+  }
+
+  $sql = "SELECT m.load_functions, m.to_arg_functions, m.access_callback, m.access_arguments, m.page_callback, m.page_arguments, m.title, m.title_callback, m.title_arguments, m.type, m.description, ml.*
+    FROM {menu_links} ml LEFT JOIN {menu_router} m ON m.path = ml.router_path
+    WHERE ml.menu_name = :menu_name
+    ORDER BY p1 ASC, p2 ASC, p3 ASC, p4 ASC, p5 ASC, p6 ASC, p7 ASC, p8 ASC, p9 ASC";
+  $result = db_query($sql, array(':menu_name' => $menu_name));
+  $links = array();
+  while ($row = $result->fetchAssoc()) {
+    $links[] = $row;
+  }
+  $tree = menu_tree_data($links);
+  $node_links = array();
+  menu_tree_collect_node_links($tree, $node_links);
+  $menu_admin = TRUE;
+  menu_tree_check_access($tree, $node_links);
+  $menu_admin = FALSE;
+
+  $menu['menu_name'] = $new_name;
+  $menu['title'] = t('Clone of') . ' ' . $menu['title'];
+  $menu['tree'] = $tree;
+  return $menu;
+}
