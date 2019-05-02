@@ -1,0 +1,54 @@
+<?php
+
+function mec_lang_link_block_info() {
+  $blocks['mec_lang_link'] = array(
+    'info' => t('Lien pour changer de langue'), 
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  return $blocks;
+}
+
+function mec_lang_get_language_selector() {
+  global $language;
+  
+  if (drupal_multilingual()) {
+    $path = drupal_is_front_page() ? '<front>' : $_GET['q'];
+    $links = language_negotiation_get_switch_links('language', $path);
+
+    if (isset($links->links)) {
+      drupal_add_css(drupal_get_path('module', 'locale') . '/locale.css');
+      drupal_add_css(drupal_get_path('module', 'mec_lang_link') . '/mec_lang_link.css');
+      $class = "language-switcher-{$links->provider}";
+      $variables = array('links' => $links->links, 'attributes' => array('class' => array($class)));
+
+      /*foreach ($variables['links'] as $key => $mec_lang_option) {
+        // Unset the current language
+        if ($language->language == $key) {
+        	unset($variables['links'][$key]);
+        	break;
+        }
+      }*/
+
+      foreach ($variables['links'] as $key => $mec_lang_option) {
+        // Change les noms des langues pour son abbréviation
+        //var_dump($variables['links'][$key]);exit;
+        if ($variables['links'][$key]["title"] == "Français" ||
+        	$variables['links'][$key]["title"] == "French") {
+        	$variables['links'][$key]["title"] = 'Français';
+        }
+        if ($variables['links'][$key]["title"] == "English" ||
+        	$variables['links'][$key]["title"] == "Anglais") {
+        	$variables['links'][$key]["title"] = 'English';
+        }
+      }
+      return theme('links__locale_block', $variables);
+    }
+  }
+}
+
+function mec_lang_link_block_view($delta = '') {
+	$block = array(
+    'content' =>  mec_lang_get_language_selector(),
+  );
+	return $block;
+}

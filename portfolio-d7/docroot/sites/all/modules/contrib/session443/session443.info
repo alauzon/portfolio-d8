@@ -1,0 +1,14 @@
+
+name = 443 Session
+description = Restricts logged in users to use HTTPS for their entire session.
+core = 7.x
+package = Security
+
+files[] = session443.module
+files[] = session443.install
+; Information added by drupal.org packaging script on 2011-02-25
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "session443"
+datestamp = "1298620153"
+

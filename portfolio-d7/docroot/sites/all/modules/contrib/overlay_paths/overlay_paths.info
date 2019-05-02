@@ -1,0 +1,12 @@
+name = "Overlay paths"
+description = "Allows other developers to define paths that should use the overlay, but not an admin theme"
+core = 7.x
+; This module will totally work without the overlay
+dependencies[] = "overlay"
+
+; Information added by drupal.org packaging script on 2012-05-11
+version = "7.x-1.1"
+core = "7.x"
+project = "overlay_paths"
+datestamp = "1336720870"
+

@@ -1,0 +1,6 @@
+name = Mécanicad Language link chooser
+package = Mécanicad
+description = Fourni un lien pour changer de langue
+dependencies[] = locale
+core = 7.x
+

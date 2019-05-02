@@ -1,0 +1,85 @@
+<?php
+
+/**
+ * Implementation of hook_init().
+ */
+function context_overlay_init() {
+  if ($plugin = context_get_plugin('reaction', 'show_overlay')) {
+    $plugin->execute();
+  }
+  /*if ($plugin = context_get_plugin('reaction', 'hide_overlay')) {
+    $plugin->execute();
+  }*/
+  if ($plugin = context_get_plugin('reaction', 'overlay_properties')) {
+    $plugin->execute();
+  }
+}
+
+/**
+ * Notify CTools that we'll be using the plugin API with Context module
+ */
+function context_overlay_ctools_plugin_api($module, $api) {
+  if ($module == 'context' && $api == 'plugins') {
+    return array('version' => 3);
+  }
+}
+
+/**
+ * CTools plugin API hook for Context
+ */
+function context_overlay_context_plugins() {
+  $plugins = array();
+  $plugins['context_overlay_show_overlay'] = array(
+    'handler' => array(
+      'path' => drupal_get_path('module', 'context_overlay') .'/plugins',
+      'file' => 'context_overlay_show_overlay.inc',
+      'class' => 'context_overlay_show_overlay',
+      'parent' => 'context_reaction',
+    ),
+  );
+  // TODO: figure out how we can can do this
+  /*$plugins['context_overlay_hide_overlay'] = array(
+    'handler' => array(
+      'path' => drupal_get_path('module', 'context_overlay') .'/plugins',
+      'file' => 'context_overlay_hide_overlay.inc',
+      'class' => 'context_overlay_hide_overlay',
+      'parent' => 'context_reaction',
+    ),
+  );*/
+  $plugins['context_overlay_overlay_properties'] = array(
+    'handler' => array(
+      'path' => drupal_get_path('module', 'context_overlay') .'/plugins',
+      'file' => 'context_overlay_overlay_properties.inc',
+      'class' => 'context_overlay_overlay_properties',
+      'parent' => 'context_reaction',
+    ),
+  );
+
+
+  return $plugins;
+}
+
+/**
+ * Registry hook for conditions & reactions.
+ */
+function context_overlay_context_registry() {
+  return array(
+    'reactions' => array(
+      'show_overlay' => array(
+        'title' => t('Force Overlay'),
+        'description' => t('Show this page in an overlay.'),
+        'plugin' => 'context_overlay_show_overlay',
+      ),
+      /*'hide_overlay' => array(
+        'title' => t('Force No Overlay'),
+        'description' => t('Ensure this page is not shown in the overlay.'),
+        'plugin' => 'context_overlay_hide_overlay',
+      ),*/
+      'overlay_properties' => array(
+        'title' => t('Customize Overlay Properties'),
+        'description' => t('Set the overlay width and customize other settings.'),
+        'plugin' => 'context_overlay_overlay_properties',
+      ),
+    ),
+  );
+}

@@ -1,0 +1,6 @@
+
+Breadcrumb 7.x-1.x, xxxx-xx-xx
+------------------------------
+by sun: Added #pre_render callback to support menu customizations.
+by sun: Added very basic first kick-start code.
+by sun: Added initial baseline of module files.

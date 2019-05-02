@@ -1,0 +1,34 @@
+/**
+ * @file TODO.txt
+ * @brief Invoice module
+ *
+ * This module was developed by Platina Designs, http://www.platinadesigns.nl
+ *
+ * @author Pieter Vogelaar <ps.vogelaar@platinadesigns.nl>
+ */
+
+TODO
+==============================
+
+MUST:
+* Make PDF format "A4, letter, etc." configurable
+
+NICE:
+* Sorting of invoice items with DRAG and DROP => http://api.drupal.org/api/function/drupal_add_tabledrag
+* Make invoice list sortable on customer company name / lastname, firstname
+* Filter: Pay status filter in invoice list
+* Filter: Overtime status
+* Generate invoice only once and output it to a PDF file for better performance and reduce of CPU
+  - Display in the invoice list a regenerate invoice icon
+* Selectbox in the invoice admin screen with yes/no for displaying the field to manual fillin an invoice number
+* Tag an invoice item VAT
+
+VERY NICE:
+* Possibility to create a new invoice based on a old one => http://drupal.org/node/345636
+* Possibility to link an invoice to a site user + page for that user to view his invoices => http://drupal.org/node/346516
+  - With a extra option to also send the invoice by email (if no site user is selected the customer email field that is not implemented yet
+    will be choosen, if both are empty an error will be thrown if this checkbox is still checked. => http://drupal.org/node/346005
+* Dynamicly extend customer/invoice fields to add for example supplier_kpp_number and supplier_inn_number. A bit like the webforms module idea.
+* After invoice item delete set odd/even rows again
+* Sending reminders, when exceeding pay limit
+* Print "COPY" image on the invoice, for administration archive purposes

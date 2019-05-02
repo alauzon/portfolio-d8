@@ -1,0 +1,13 @@
+name = Field Boxes
+descriptions = Provides a box type that pulls a field from an entity.A
+dependancies[] = 'boxes'
+dependancies[] = 'entity_autocomplete'
+core = 7.x
+
+
+; Information added by drupal.org packaging script on 2011-09-16
+version = "7.x-1.0-alpha1"
+core = "7.x"
+project = "field_boxes"
+datestamp = "1316191302"
+

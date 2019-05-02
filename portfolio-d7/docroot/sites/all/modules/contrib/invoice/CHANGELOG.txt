@@ -1,0 +1,100 @@
+/**
+ * @file CHANGELOG.txt
+ * @brief Invoice module
+ * 
+ * This module was developed by Platina Designs, http://www.platinadesigns.nl
+ *
+ * @author Pieter Vogelaar <ps.vogelaar@platinadesigns.nl>
+ */
+ 
+CHANGELOG (Date format: dd-mm-yyyy)
+=========================================
+
+02-10-2010:
+* Improved user experience, the form is no longer submitted the enter key is pressed. So an invoice item can be added whith the tab and enter key.
+* Fixed regression bug: Set template on the invoice creation form is broken
+* Updated translation files
+* Fixed issue #719586: place dompdf in libraries folder
+* Fixed issue #342664: Scripting error, can't add invoice items (Added support for clean urls off)
+* Refactored invoice.js
+* Cancel button when editing invoice item
+* Confirm message when clicking on a delete icon
+
+01-10-2010:
+* After adding an invoice item move the cursor back to the invoice item description field
+* Removed unused/old menu items in invoice_menu()
+* Fully implemented permission "administer own invoices"
+* Fixed issue #784530: Change of the owner of an invoice do not to change the owner of the invoice items
+* Fixed issue #917230: Uninstall does not remove persistent variables
+
+17-02-2010:
+* Fixed issue #604198: PDF invoice name is not formatted
+* Fixed issue #671658: Requires PHP5 - but not stated as requirement
+* An invoice doesn't have revisions, so the revision information fieldset must be hidden.
+* Fixed issue #671664: Uninstall does not work
+* Fixed bug: Invoice prefix is based on the current time, this must be the invoice creation time.
+* Fixed bug: Weight column was shows up after an invoice item when editing an invoice. This is not fully implemented yet and must not appear in the way it does now.
+
+----------> Released: Invoice 6.x-1.0 <----------
+
+02-01-2009:
+* Did some minor source formatting
+
+Released: Invoice 6.x-1.0-rc3
+
+20-12-2008:
+* Moved AJAX JS into a external JS file.
+* Did code review with the coder module to be compatibale with Drupal coding standards
+
+14-12-2008:
+* Added _invoice_money_format() function as alternative is the default PHP money_format() function doesn't exist
+* Replaced all lines that used _invoice_round() and/or money_format() with _invoice_round_and_format_money()
+* Fixed bug: The installer didn't set the default invoice column display settings already
+
+13-12-2008:
+* Fixed bug: "Invoice items : Unit Cost incl VAT is wrong whent you use a VAT less of 10%" => http://drupal.org/node/345800
+* Added a TODO: Possibility to link an invoice to a site user + page for that user to view his invoices => http://drupal.org/node/346516
+  - With a extra option to also send the invoice by email (if no site user is selected the customer email field that is not implemented yet
+    will be choosen, if both are empty an error will be thrown if this checkbox is still checked. => http://drupal.org/node/346005
+
+12-12-2008:
+* Added a TODO item with priority "very nice": Possibility to create a new invoice based on a old one
+* Fixed bug: http://drupal.org/node/342664 (scripting error in ie7)
+
+----------> Released: Invoice 6.x-1.0-rc2 <----------
+
+22-11-2008:
+* Fixed bug of undefined function in the install file
+* Fixed some text in Dutch translation file
+
+----------> Released: Invoice 6.x-1.0-rc1 <----------
+
+22-11-2008:
+* Update dutch translation file
+* Added a solid solution for removing invoices from "node" overview
+
+19-11-2008:
+* Added support for: Invoice number format, 12345, 2008001, 200806001, etc.
+  - It's possible now to prefix invoice number with whatever, for example A2008001.
+
+12-11-2008:
+* Display invoice comments on the invoice template
+* Display pay limit on the invoice template
+* Added: Global, per template set which fields to display on the invoice: VAT, Unitcost (ex), Unitcost (inc), Total (ex), Total (inc)
+* FIXED BUG: Default template settings seem to don't inherit from general settings
+  - Inheriting worked fine, made a small ajustment so it works even smoother now.
+  - The main problem was that the preferred locale was not installed on the system. I made that form description more complete now
+    and added a list which displays installed locales on the system.  
+* Added: Translate file for dutch language
+
+11-11-2008:
+* FIXED BUG: Functions can never have the same name, also when including just one template (Fatal error: Cannot redeclare _invoice_get_template_output())
+* FIXED BUG: Installer is not correct and must be updated (we're using schema files now)
+* Added and tested invoice_update_1() function, works 100% correct.
+
+01-11-2008:
+* FIXED BUG: Search on a customer starting with "f" or other sprintf() like characters go wrong
+
+...
+..
+.

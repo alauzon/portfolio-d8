@@ -1,0 +1,11 @@
+name = Arrange Fields
+description = Drag and drop form fields into any position.
+configure = admin/config/arrange-fields
+tags[] = arrange_fields
+core = 7.x 
+; Information added by drupal.org packaging script on 2012-02-26
+version = "7.x-1.8"
+core = "7.x"
+project = "arrange_fields"
+datestamp = "1330265437"
+

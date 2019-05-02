@@ -1,0 +1,16 @@
+name = Relation Graphs
+description = Provides a field renderer
+package = Visualization
+core = 7.x
+dependencies[] = graphapi
+dependencies[] = relation_dummy_field
+
+files[] = graphapi_relation.module
+
+
+; Information added by drupal.org packaging script on 2012-01-10
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "graphapi"
+datestamp = "1326155004"
+

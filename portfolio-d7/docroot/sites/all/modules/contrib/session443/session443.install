@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the session443 module.
+ *
+ */
+
+
+/**
+ * Implementation of hook_enable().
+ */
+function session443_enable() {
+  $current_denied = variable_get('site_403', '');
+  if ($current_denied != 'session443/denied') {
+    variable_set('session443_site_403_orig', $current_denied);
+  }
+  variable_set('site_403', 'session443/denied');
+}
+
+
+/**
+ * Implementation of hook_disable().
+ */
+function session443_disable() {
+  $current_denied = variable_get('site_403', '');
+  if ($current_denied == 'session443/denied') {
+    // If we have overridden the site_403 variable then restore it to the original value.
+    $original_denied = variable_get('session443_site_403_orig', '');
+    variable_set('site_403', $original_denied);
+  }
+}
+
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function session443_uninstall() {
+  variable_del('session443_site_403_orig');
+}
+
+
+// vim: set filetype=php expandtab tabstop=2 shiftwidth=2 autoindent smartindent:

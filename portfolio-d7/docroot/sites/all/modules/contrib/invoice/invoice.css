@@ -1,0 +1,32 @@
+.invoice-items-table {
+  margin: 0;  
+}
+.invoice-items-table th,
+.invoice-items-table td {
+  text-align: right;
+  padding-right: 0;
+  padding-left: .2em;
+}
+.invoice-items-table th:first-child,
+.invoice-items-table td:first-child {
+  text-align:left;
+  padding-right: 1em;
+  padding-left: .2em;  
+}
+.invoice-items-table th:first-child {
+  width: 38%;
+}
+.invoice-items-table td.actions {
+  width: 8%;
+}
+.mouse-pointer {
+  cursor: pointer;
+}
+#invoice-node-form .fieldset-wrapper {
+  margin-top: 25px;
+}
+
+/* Make sure the background of the autocomplete box is filled */ 
+#autocomplete {
+  background: #fff;
+}

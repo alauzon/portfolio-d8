@@ -1,0 +1,242 @@
+<?php
+
+/**
+ * @file
+ * Use entity view modes inside <a href="http://drupal.org/project/ctools">Ctools</a> modal.
+ */
+
+/**
+ * Implements hook_init().
+ */
+function view_mode_modal_init() {
+  //add css files
+  drupal_add_css(drupal_get_path('module', 'view_mode_modal') . '/view_mode_modal.css');
+  
+  // Include Ctools files
+  ctools_include('ajax');
+  ctools_include('modal');
+  ctools_modal_add_js();
+}
+
+/**
+ * Implements hook_menu().
+ */
+function view_mode_modal_menu() {
+  $items = array();
+  
+  $items['modal/%ctools_js/view/%/%/%'] = array(
+    'title' => 'View Entity',
+    'page callback' => 'view_mode_modal_view_entity',
+    'page arguments' => array(1, 3, 4, 5),
+    'access callback' => TRUE,
+  );
+  
+  return $items;
+}
+
+function view_mode_modal_view_entity($js = NULL, $entity_type, $entity_id, $view_mode) {
+  if (!$js) {
+    //TODO handle fallbck is $js is not set
+    return drupal_access_denied();
+  }
+  
+  $entity = entity_load($entity_type, array($entity_id));
+  $title = view_mode_modal_get_entity_title($entity_type, $entity[$entity_id]);
+  $output = render(entity_view($entity_type, $entity, $view_mode));
+  
+  if ($js) {
+    ctools_include('ajax');
+    $commands = array();
+    $commands[] = ctools_modal_command_display($title, $output);
+    print ajax_render($commands);
+    exit;
+  }
+  else {
+    return $output;
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function view_mode_modal_form_field_ui_display_overview_form_alter(&$form, &$form_state) {
+  $entity_type = $form['#entity_type'];
+  $bundle = $form['#bundle'];
+  $view_mode = $form['#view_mode'];
+  $bundle_settings = field_bundle_settings($entity_type, $bundle);
+  $view_mode_options = array('' => t('None')) + view_mode_modal_view_mode_options($form['#entity_type']);
+  $view_mode_modal_settings = isset($bundle_settings['view_modes'][$view_mode]['view_mode_modal']) ? $bundle_settings['view_modes'][$view_mode]['view_mode_modal'] : '';
+  
+  // Add additional settings vertical tab.
+  if (!isset($form['additional_settings'])) {
+    $form['additional_settings'] = array(
+      '#type' => 'vertical_tabs',
+      '#theme_wrappers' => array('vertical_tabs'),
+      '#prefix' => '<div>',
+      '#suffix' => '</div>',
+      '#tree' => TRUE,
+    );
+    $form['#attached']['js'][] = 'misc/form.js';
+    $form['#attached']['js'][] = 'misc/collapse.js';
+  }
+  
+  // Add extra guidelines for webmaster.
+  $form['additional_settings']['view_mode_modal'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Modal'),
+    '#description' => t('You can link this view mode to another view mode here. Eg. You can link a teaser view mode to a full view mode.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    '#parents' => array('additional_settings'),
+  );
+  
+  $form['additional_settings']['view_mode_modal']['target_view_mode'] = array(
+    '#title' => t('Target view mode'),
+    '#description' => t('Link the !current view mode to the view mode selected above.', array(
+      '!current' => '<strong>' . $form['#view_mode'] . '</strong>',
+    )),
+    '#type' => 'select',
+    '#options' => $view_mode_options,
+    '#default_value' => isset($view_mode_modal_settings['target_view_mode']) ? $view_mode_modal_settings['target_view_mode'] : '',
+  );
+  
+  $form['additional_settings']['view_mode_modal']['modal_class'] = array(
+    '#title' => t('Modal class'),
+    '#type' => 'textfield',
+    '#description' => t('If you are using a custom modal, you can set the modal class to use here.'),
+    '#default_value' => isset($view_mode_modal_settings['modal_class']) ? $view_mode_modal_settings['modal_class'] : '',
+  );
+  
+  //add a custom submit handler
+  $form['#submit'][] = 'view_mode_modal_field_ui_display_overview_form_submit';
+}
+
+/**
+ * Submit handler for field_ui_display_overview_form form
+ */
+function view_mode_modal_field_ui_display_overview_form_submit($form, &$form_state) {
+  $form_values = $form_state['values'];
+  $entity_type = $form['#entity_type'];
+  $bundle = $form['#bundle'];
+  $view_mode = $form['#view_mode'];
+  $view_mode_modal_settings = array();
+  $view_mode_modal_settings['target_view_mode'] = $form_values['additional_settings']['target_view_mode'];
+  $view_mode_modal_settings['modal_class'] = $form_values['additional_settings']['modal_class'];
+  
+  // Get current bundle settings.
+  $bundle_settings = field_bundle_settings($entity_type, $bundle);
+  $bundle_settings['view_modes'][$view_mode]['view_mode_modal'] = $view_mode_modal_settings;
+  
+  // Save updated bundle settings.
+  field_bundle_settings($entity_type, $bundle, $bundle_settings);
+}
+
+/**
+ * Implements hook_entity_view_alter().
+ */
+function view_mode_modal_entity_view_alter(&$build, $type) {
+  $build['#post_render'][] = 'view_mode_modal_build_post_render';
+}
+
+/**
+ * Post render callback for entity_view
+ */
+function view_mode_modal_build_post_render($element, $build) {
+  $entity = view_mode_modal_get_entity_info($build);
+  if ($entity) {
+    $entity_type = $build['#entity_type'];
+    $bundle = $build['#bundle'];
+    $view_mode = $build['#view_mode'];
+    $bundle_settings = field_bundle_settings($entity_type, $bundle);
+    $view_mode_modal_settings = isset($bundle_settings['view_modes'][$view_mode]['view_mode_modal']) ? $bundle_settings['view_modes'][$view_mode]['view_mode_modal'] : '';
+    $entity_id = entity_id($entity_type, $entity);
+    
+    if (isset($view_mode_modal_settings['target_view_mode']) && !empty($view_mode_modal_settings['target_view_mode'])) {
+      $target_view_mode = $view_mode_modal_settings['target_view_mode'];
+      $modal_class = isset($view_mode_modal_settings['modal_class']) ? $view_mode_modal_settings['modal_class'] : '';
+      
+      //we do not wrap the output in an anchor because it is not HTML valid.
+      //use an anchor inside the output and place it over the output with CSS
+      $output = '<div class="view-mode-target-wrapper">';
+      $output .= $element;
+      $output .= l(t('Read more'), 'modal/nojs/view/' . $entity_type . '/' . $entity_id . '/' . $target_view_mode, array(
+        'attributes' => array(
+          'class' => array('view-mode-target-link', 'ctools-use-modal', $modal_class),
+        ),
+      ));
+      $output .= '</div>';
+      
+      return $output;
+    }
+  }
+  
+  return $element;
+}
+
+/**
+ * Helper function to get required entity
+ *
+ * @param $build
+ *  see view_mode_modal_entity_view_alter
+ */
+function view_mode_modal_get_entity_info($build) {
+  switch ($build['#entity_type']) {
+    case 'node':
+      return $build['#node'];
+    case 'user':
+      return $build['#account'];
+  }
+  
+  return FALSE;
+}
+
+/**
+ * Helper function to get title from entity
+ *
+ * @param $entity
+ *  the entity object
+ */
+function view_mode_modal_get_entity_title($entity_type, $entity) {
+  switch ($entity_type) {
+    case 'node':
+      return $entity->title;
+    case 'user':
+      return $entity->name;
+  }
+}
+
+/**
+ * Helper function to get view modes for an entity
+ *
+ * @param $entity_type
+ *  the type of entity eg. node, user
+ *
+ * @return
+ *  array of entity view modes
+ */
+function view_mode_modal_get_entity_view_modes($entity_type) {
+  //load entity information
+  $entity = entity_get_info($entity_type);
+  return $entity['view modes'];
+}
+
+/**
+ * Helper function to build an #options ready list of view_modes
+ *
+ * @param @entity_type
+ *  the type of entity eg node, user
+ *
+ * @return
+ *  an #options ready view mode array
+ */
+function view_mode_modal_view_mode_options($entity_type) {
+  $view_modes = view_mode_modal_get_entity_view_modes($entity_type);
+  
+  //build an #options ready view mode array
+  $view_modes_options = array();
+  foreach ($view_modes as $key => $view_mode) {
+    $view_modes_options[$key] = $view_mode['label'];
+  }
+  
+  return $view_modes_options;
+}
