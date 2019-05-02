@@ -1,0 +1,18 @@
+uuid: 1f63aa14-98a3-474f-a188-2a03ad170f6b
+langcode: en
+status: true
+dependencies:
+  config:
+    - media.type.tweet
+id: media.tweet.scheduled_transition_state
+field_name: scheduled_transition_state
+entity_type: media
+bundle: tweet
+label: null
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

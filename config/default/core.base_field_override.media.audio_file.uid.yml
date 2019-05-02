@@ -1,0 +1,20 @@
+uuid: 61771e80-7db4-406e-a873-e39a284c217b
+langcode: en
+status: true
+dependencies:
+  config:
+    - media.type.audio_file
+id: media.audio_file.uid
+field_name: uid
+entity_type: media
+bundle: audio_file
+label: 'Authored by'
+description: 'The user ID of the author.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: 'Drupal\media\Entity\Media::getCurrentUserId'
+settings:
+  handler: default
+  handler_settings: {  }
+field_type: entity_reference

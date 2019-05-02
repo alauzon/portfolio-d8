@@ -1,0 +1,18 @@
+uuid: ce3d92cf-bb44-4289-9e20-270cfb701f30
+langcode: en
+status: true
+dependencies:
+  config:
+    - media.type.audio_file
+id: media.audio_file.metatag
+field_name: metatag
+entity_type: media
+bundle: audio_file
+label: Metatags
+description: 'The meta tags for the entity.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: map

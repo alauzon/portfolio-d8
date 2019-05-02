@@ -1,0 +1,18 @@
+uuid: a2f89c8b-1b42-4357-9722-1c36080f33c3
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.font_foundry
+id: taxonomy_term.font_foundry.changed
+field_name: changed
+entity_type: taxonomy_term
+bundle: font_foundry
+label: Changed
+description: 'The time that the term was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

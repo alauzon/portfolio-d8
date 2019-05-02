@@ -1,0 +1,18 @@
+uuid: 842dc93e-a6be-4262-a1f1-c77abf10713d
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.media_slideshow
+id: block_content.media_slideshow.scheduled_transition_state
+field_name: scheduled_transition_state
+entity_type: block_content
+bundle: media_slideshow
+label: null
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

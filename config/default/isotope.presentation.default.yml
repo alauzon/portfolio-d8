@@ -1,0 +1,18 @@
+uuid: ef41bf1d-6d41-4ccb-8e04-52e9249ff1ef
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: bviVqQO2k6NBY3akbMoae-sL1qRod_y9zspauxMVLbo
+id: default
+label: 'A Default Presentation'
+layout_mode: masonry
+plugins: null
+transition_duration: 0.4s
+url_filters: null
+is_fit_width: null
+is_horizontal: null
+stamp: .stamp
+horizontal_alignment: null
+vertical_alignment: null
+is_origin_left: 1

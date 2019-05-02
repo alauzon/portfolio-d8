@@ -88,4 +88,5 @@ content:
 hidden:
   body: true
   content_moderation_control: true
+  langcode: true
   panelizer: true

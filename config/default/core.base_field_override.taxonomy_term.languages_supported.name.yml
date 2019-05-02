@@ -1,0 +1,18 @@
+uuid: cf025344-1343-46c4-aa90-da662dfd3761
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.languages_supported
+id: taxonomy_term.languages_supported.name
+field_name: name
+entity_type: taxonomy_term
+bundle: languages_supported
+label: Name
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,20 @@
+uuid: 494b1ccf-8be6-4b22-9f5b-95948942a058
+langcode: en
+status: true
+dependencies:
+  config:
+    - media.type.video_file
+id: media.video_file.uid
+field_name: uid
+entity_type: media
+bundle: video_file
+label: 'Authored by'
+description: 'The user ID of the author.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: 'Drupal\media\Entity\Media::getCurrentUserId'
+settings:
+  handler: default
+  handler_settings: {  }
+field_type: entity_reference

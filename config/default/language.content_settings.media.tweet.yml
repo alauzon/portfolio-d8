@@ -1,0 +1,18 @@
+uuid: 054ebbdc-8f9a-437a-a6cd-2af50c685576
+langcode: en
+status: true
+dependencies:
+  config:
+    - media.type.tweet
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: media.tweet
+target_entity_type_id: media
+target_bundle: tweet
+default_langcode: current_interface
+language_alterable: false

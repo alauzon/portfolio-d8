@@ -1,0 +1,18 @@
+uuid: 160fa57d-efca-44ae-96fa-66a22bf4d401
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.font_classification
+id: taxonomy_term.font_classification.name
+field_name: name
+entity_type: taxonomy_term
+bundle: font_classification
+label: Name
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

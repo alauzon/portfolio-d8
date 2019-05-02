@@ -1,0 +1,18 @@
+uuid: b3bba715-31b2-453d-a9b5-c7fa142556a6
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.font_designer
+id: taxonomy_term.font_designer.changed
+field_name: changed
+entity_type: taxonomy_term
+bundle: font_designer
+label: Changed
+description: 'The time that the term was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed
