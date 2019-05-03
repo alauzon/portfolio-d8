@@ -8,7 +8,7 @@ dependencies:
     - seven
 _core:
   default_config_hash: Gb0quEgYLU5Y9Y8GTIdju9bnodxLQCX2_ATpXdln--o
-id: seven_content
+id: seven_system_main
 theme: seven
 region: content
 weight: 0
@@ -16,7 +16,11 @@ provider: null
 plugin: system_main_block
 settings:
   id: system_main_block
-  label: 'Main page content'
+  label: ''
   provider: system
   label_display: '0'
-visibility: {  }
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: '/admin/*'

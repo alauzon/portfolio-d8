@@ -1,0 +1,11 @@
+uuid: 40e0731d-0deb-4e72-8fe6-b6cf648613bc
+langcode: en
+status: true
+dependencies: {  }
+name: Article
+type: article
+description: 'Utilisez les <em>articles</em> pour des contenus possédant une temporalité tels que des actualités, des communiqués de presse ou des billets de blog.'
+help: ''
+new_revision: false
+preview_mode: 1
+display_submitted: true

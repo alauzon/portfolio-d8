@@ -1,0 +1,14 @@
+uuid: fb6977f0-3b73-4cd4-ab5d-4c12c15b1e48
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.features_test_creator
+  module:
+    - user
+id: user_remove_role_action.features_test_creator
+label: 'Remove the Testing: Features creator role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: features_test_creator

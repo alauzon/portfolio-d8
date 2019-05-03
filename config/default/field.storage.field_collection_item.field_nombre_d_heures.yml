@@ -1,0 +1,20 @@
+uuid: 5796bc49-71d8-481a-8409-a66ee61db85c
+langcode: und
+status: true
+dependencies:
+  module:
+    - field_collection
+id: field_collection_item.field_nombre_d_heures
+field_name: field_nombre_d_heures
+entity_type: field_collection_item
+type: decimal
+settings:
+  precision: 10
+  scale: 2
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,14 @@
+uuid: 4b5acb5c-5a18-4c8f-8837-d676e3236bfd
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.site_creator
+  module:
+    - user
+id: user_remove_role_action.site_creator
+label: 'Remove the Site creator role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: site_creator

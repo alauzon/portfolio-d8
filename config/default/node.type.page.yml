@@ -11,10 +11,10 @@ third_party_settings:
     parent: 'main:'
 _core:
   default_config_hash: nb_cPUs4dvoXeLvPMQYwg1oWcQ5-nE7TcwKGs_VsiHg
-name: 'Basic page'
+name: 'Page de base'
 type: page
-description: 'Use <em>basic pages</em> for your static content, such as an ''About us'' page.'
+description: 'Utilisez les <em>pages de base</em> pour votre contenu statique, tel que la page ''Qui sommes-nous''.'
 help: ''
-new_revision: true
+new_revision: false
 preview_mode: 1
 display_submitted: false

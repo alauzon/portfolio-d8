@@ -1,0 +1,14 @@
+uuid: 57414e50-348a-44cf-88f3-e7bb711e9779
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.features_test_reviewer
+  module:
+    - user
+id: user_remove_role_action.features_test_reviewer
+label: 'Remove the Testing: Features reviewer role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: features_test_reviewer

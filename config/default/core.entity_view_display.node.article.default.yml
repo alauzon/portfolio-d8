@@ -1,0 +1,69 @@
+uuid: 896ec24b-465b-4453-aa23-42e0afe51115
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_display.comment.comment_node_article.default
+    - field.field.node.article.body
+    - field.field.node.article.comment_node_article
+    - field.field.node.article.field_image
+    - field.field.node.article.field_tags
+    - node.type.article
+  module:
+    - comment
+    - image
+    - text
+    - user
+id: node.article.default
+targetEntityType: node
+bundle: article
+mode: default
+content:
+  body:
+    label: hidden
+    weight: 0
+    type: text_default
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  comment_node_article:
+    label: hidden
+    type: comment_default
+    weight: 20
+    settings:
+      view_mode: default
+      pager_id: 0
+    third_party_settings: {  }
+    region: content
+  field_image:
+    label: hidden
+    weight: -1
+    type: image
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    region: content
+  field_tags:
+    label: above
+    weight: 10
+    type: entity_reference_label
+    settings:
+      link: true
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  title:
+    label: hidden
+    type: string
+    weight: -5
+    region: content
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+hidden:
+  langcode: true

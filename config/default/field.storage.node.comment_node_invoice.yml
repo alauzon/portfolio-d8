@@ -1,0 +1,20 @@
+uuid: fc852750-74d4-472c-a298-e35c4c25bf43
+langcode: en
+status: true
+dependencies:
+  module:
+    - comment
+    - node
+id: node.comment_node_invoice
+field_name: comment_node_invoice
+entity_type: node
+type: comment
+settings:
+  comment_type: comment_node_invoice
+module: comment
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

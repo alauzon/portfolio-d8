@@ -77,8 +77,12 @@ display:
         options:
           view_modes:
             'entity:node':
+              article: default
+              features_test: default
+              invoice: default
               landing_page: teaser
               page: teaser
+              site: default
       fields:
         rendered:
           table: search_api_index_content

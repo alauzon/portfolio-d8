@@ -1,0 +1,21 @@
+uuid: cccc64c0-58e5-4826-8cbb-15b9c866aeb6
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node_site
+label: 'Content - Site'
+type: 'canonical_entities:node'
+pattern: 'sites/[node:title]'
+selection_criteria:
+  -
+    id: node_type
+    bundles:
+      site: site
+    negate: false
+    context_mapping:
+      node: node
+selection_logic: and
+weight: 0
+relationships: {  }

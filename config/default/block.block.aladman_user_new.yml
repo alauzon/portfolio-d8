@@ -1,0 +1,24 @@
+uuid: c6d333c9-5f64-4105-86fd-ef063485a911
+langcode: en
+status: false
+dependencies:
+  config:
+    - views.view.who_s_new
+  module:
+    - views
+  theme:
+    - aladman
+id: aladman_user_new
+theme: aladman
+region: ''
+weight: -2
+provider: null
+plugin: 'views_block:who_s_new-block_1'
+settings:
+  id: 'views_block:who_s_new-block_1'
+  label: ''
+  provider: views
+  label_display: '0'
+  views_label: ''
+  items_per_page: '5'
+visibility: {  }

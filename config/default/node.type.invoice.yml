@@ -1,0 +1,11 @@
+uuid: 9b88e19f-9242-4e5c-8249-b62a1651c751
+langcode: en
+status: true
+dependencies: {  }
+name: Facture
+type: invoice
+description: 'If you want to add an invoice, use this content type.'
+help: ''
+new_revision: false
+preview_mode: 1
+display_submitted: true

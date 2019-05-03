@@ -1,0 +1,24 @@
+uuid: aa37fdf5-6b02-4ce7-b097-b26093920423
+langcode: en
+status: false
+dependencies:
+  config:
+    - views.view.who_s_new
+  module:
+    - views
+  theme:
+    - aladmin
+id: aladmin_user_new
+theme: aladmin
+region: ''
+weight: -13
+provider: null
+plugin: 'views_block:who_s_new-block_1'
+settings:
+  id: 'views_block:who_s_new-block_1'
+  label: ''
+  provider: views
+  label_display: '0'
+  views_label: ''
+  items_per_page: '5'
+visibility: {  }

@@ -1,0 +1,8 @@
+uuid: b0618b2e-13f9-47ad-b909-2af6e76c8245
+langcode: en
+status: true
+dependencies: {  }
+id: comment_node_invoice
+label: 'Facture comment'
+target_entity_type_id: node
+description: null

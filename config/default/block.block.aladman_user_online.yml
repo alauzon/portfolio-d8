@@ -1,0 +1,24 @@
+uuid: 7ece7da3-55f7-4b4e-b358-b78520b65667
+langcode: en
+status: false
+dependencies:
+  config:
+    - views.view.who_s_online
+  module:
+    - views
+  theme:
+    - aladman
+id: aladman_user_online
+theme: aladman
+region: ''
+weight: 4
+provider: null
+plugin: 'views_block:who_s_online-who_s_online_block'
+settings:
+  id: 'views_block:who_s_online-who_s_online_block'
+  label: ''
+  provider: views
+  label_display: '0'
+  views_label: ''
+  items_per_page: '10'
+visibility: {  }

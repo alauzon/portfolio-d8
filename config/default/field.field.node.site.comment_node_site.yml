@@ -1,0 +1,33 @@
+uuid: 811b7eb7-1a72-409c-919f-356fc64b0608
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.comment_node_site
+    - node.type.site
+  module:
+    - comment
+id: node.site.comment_node_site
+field_name: comment_node_site
+entity_type: node
+bundle: site
+label: Comments
+description: ''
+required: true
+translatable: true
+default_value:
+  -
+    status: 1
+    cid: 0
+    last_comment_timestamp: 0
+    last_comment_name: null
+    last_comment_uid: 0
+    comment_count: 0
+default_value_callback: ''
+settings:
+  default_mode: 0
+  per_page: 10
+  anonymous: 0
+  form_location: false
+  preview: 0
+field_type: comment

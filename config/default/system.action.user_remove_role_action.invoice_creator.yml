@@ -1,0 +1,14 @@
+uuid: 31539548-9c70-47ef-b945-514c344e4fca
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.invoice_creator
+  module:
+    - user
+id: user_remove_role_action.invoice_creator
+label: 'Remove the Facture creator role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: invoice_creator

@@ -1,0 +1,14 @@
+uuid: c19e85fb-1547-471c-a93c-4b1883ed7b3a
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.features_test_creator
+  module:
+    - user
+id: user_add_role_action.features_test_creator
+label: 'Add the Testing: Features creator role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: features_test_creator

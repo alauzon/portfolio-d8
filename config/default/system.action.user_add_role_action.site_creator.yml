@@ -1,0 +1,14 @@
+uuid: 2a2f4628-1373-4097-8767-92dd1d3c6398
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.site_creator
+  module:
+    - user
+id: user_add_role_action.site_creator
+label: 'Add the Site creator role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: site_creator

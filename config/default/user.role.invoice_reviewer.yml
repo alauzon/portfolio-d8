@@ -1,0 +1,19 @@
+uuid: adf3c5e3-52f8-4233-8dc3-c147e3b84c06
+langcode: en
+status: true
+dependencies: {  }
+id: invoice_reviewer
+label: 'Facture reviewer'
+weight: 12
+is_admin: false
+permissions:
+  - 'access content overview'
+  - 'access toolbar'
+  - 'delete any invoice content'
+  - 'edit any invoice content'
+  - 'use editorial transition archive'
+  - 'use editorial transition publish'
+  - 'use editorial transition review'
+  - 'use moderation sidebar'
+  - 'view any unpublished content'
+  - 'view latest version'

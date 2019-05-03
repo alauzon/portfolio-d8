@@ -1,0 +1,14 @@
+uuid: 6a562fe2-0ca1-432d-b98b-c03b7bcef65a
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.invoice_creator
+  module:
+    - user
+id: user_add_role_action.invoice_creator
+label: 'Add the Facture creator role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: invoice_creator

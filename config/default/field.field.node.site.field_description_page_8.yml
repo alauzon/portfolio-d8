@@ -1,0 +1,19 @@
+uuid: bb7d7919-f272-4304-b82a-4290ab6b2177
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_description_page_8
+    - node.type.site
+id: node.site.field_description_page_8
+field_name: field_description_page_8
+entity_type: node
+bundle: site
+label: 'Description page 8'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

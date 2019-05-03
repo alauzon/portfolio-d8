@@ -1,0 +1,40 @@
+uuid: 991c00e3-0769-4554-90a3-2885975cfb6a
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_display.comment.comment_node_invoice.default
+    - field.field.node.invoice.comment_node_invoice
+    - node.type.invoice
+  module:
+    - comment
+    - user
+id: node.invoice.default
+targetEntityType: node
+bundle: invoice
+mode: default
+content:
+  comment_node_invoice:
+    label: hidden
+    type: comment_default
+    weight: 20
+    settings:
+      view_mode: default
+      pager_id: 0
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  title:
+    label: hidden
+    type: string
+    weight: -5
+    region: content
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+hidden:
+  langcode: true

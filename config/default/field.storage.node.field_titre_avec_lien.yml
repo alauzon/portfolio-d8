@@ -1,0 +1,19 @@
+uuid: c173ad05-e0ee-442e-b94c-1ab5c8f2d969
+langcode: und
+status: true
+dependencies:
+  module:
+    - link
+    - node
+id: node.field_titre_avec_lien
+field_name: field_titre_avec_lien
+entity_type: node
+type: link
+settings: {  }
+module: link
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,24 @@
+uuid: 049603f5-8259-41c5-b263-ec0265cbffb5
+langcode: en
+status: false
+dependencies:
+  config:
+    - views.view.who_s_online
+  module:
+    - views
+  theme:
+    - aladmin
+id: aladmin_user_online
+theme: aladmin
+region: ''
+weight: -10
+provider: null
+plugin: 'views_block:who_s_online-who_s_online_block'
+settings:
+  id: 'views_block:who_s_online-who_s_online_block'
+  label: ''
+  provider: views
+  label_display: '0'
+  views_label: ''
+  items_per_page: '10'
+visibility: {  }

@@ -1,0 +1,24 @@
+uuid: 150ddd05-6bc1-4bc1-b8b4-fb33853cb610
+langcode: en
+status: false
+dependencies:
+  config:
+    - views.view.comments_recent
+  module:
+    - views
+  theme:
+    - aladman
+id: aladman_comment_recent
+theme: aladman
+region: ''
+weight: -7
+provider: null
+plugin: 'views_block:comments_recent-block_1'
+settings:
+  id: 'views_block:comments_recent-block_1'
+  label: ''
+  provider: views
+  label_display: '0'
+  views_label: ''
+  items_per_page: none
+visibility: {  }

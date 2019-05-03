@@ -39,8 +39,12 @@ field_settings:
         anonymous: anonymous
       view_mode:
         'entity:node':
+          article: default
+          features_test: default
+          invoice: default
           landing_page: full
           page: default
+          site: default
   status:
     label: null
     datasource_id: 'entity:node'

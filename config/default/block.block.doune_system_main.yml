@@ -1,0 +1,24 @@
+uuid: 8251e910-f89e-472b-bf26-c9145ce44704
+langcode: en
+status: false
+dependencies:
+  module:
+    - system
+  theme:
+    - doune
+id: doune_system_main
+theme: doune
+region: ''
+weight: 0
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: ''
+  provider: system
+  label_display: '0'
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: '/admin/*'

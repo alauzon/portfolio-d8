@@ -1,0 +1,25 @@
+uuid: 9cd5b67c-31fb-455f-8bf8-8dc7032f624d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_ordre
+    - node.type.site
+id: node.site.field_ordre
+field_name: field_ordre
+entity_type: node
+bundle: site
+label: Ordre
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

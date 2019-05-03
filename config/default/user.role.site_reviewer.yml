@@ -1,0 +1,19 @@
+uuid: 668fbf39-3df9-41ca-8c8f-097873c843b7
+langcode: en
+status: true
+dependencies: {  }
+id: site_reviewer
+label: 'Site reviewer'
+weight: 14
+is_admin: false
+permissions:
+  - 'access content overview'
+  - 'access toolbar'
+  - 'delete any site content'
+  - 'edit any site content'
+  - 'use editorial transition archive'
+  - 'use editorial transition publish'
+  - 'use editorial transition review'
+  - 'use moderation sidebar'
+  - 'view any unpublished content'
+  - 'view latest version'

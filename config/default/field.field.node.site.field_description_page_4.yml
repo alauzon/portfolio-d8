@@ -1,0 +1,19 @@
+uuid: 7564911c-0a11-4004-ad3c-7ef93d6fd6d2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_description_page_4
+    - node.type.site
+id: node.site.field_description_page_4
+field_name: field_description_page_4
+entity_type: node
+bundle: site
+label: 'Description page 4'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

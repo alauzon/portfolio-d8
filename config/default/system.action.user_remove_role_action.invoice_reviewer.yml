@@ -1,0 +1,14 @@
+uuid: 96d35c6d-f370-4101-a4e1-a0c7f6d88323
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.invoice_reviewer
+  module:
+    - user
+id: user_remove_role_action.invoice_reviewer
+label: 'Remove the Facture reviewer role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: invoice_reviewer

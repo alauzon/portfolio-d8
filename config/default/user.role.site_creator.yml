@@ -1,0 +1,30 @@
+uuid: c2b6246b-e296-4e3f-afd8-ceacfc6832e2
+langcode: en
+status: true
+dependencies: {  }
+id: site_creator
+label: 'Site creator'
+weight: 13
+is_admin: false
+permissions:
+  - 'access ckeditor_media_browser entity browser pages'
+  - 'access contextual links'
+  - 'access image_browser entity browser pages'
+  - 'access in-place editing'
+  - 'access media_browser entity browser pages'
+  - 'access panels in-place editing'
+  - 'access toolbar'
+  - 'administer panelizer node site content'
+  - 'administer panelizer node site layout'
+  - 'change layouts in place editing'
+  - 'create site content'
+  - 'create url aliases'
+  - 'edit own site content'
+  - 'use editorial transition create_new_draft'
+  - 'use editorial transition review'
+  - 'use moderation sidebar'
+  - 'use text format rich_text'
+  - 'view any unpublished content'
+  - 'view latest version'
+  - 'view own unpublished content'
+  - 'view site revisions'

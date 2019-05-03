@@ -1,0 +1,14 @@
+uuid: b3f95c04-d187-4c49-8fc3-1197783a1fce
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.invoice_reviewer
+  module:
+    - user
+id: user_add_role_action.invoice_reviewer
+label: 'Add the Facture reviewer role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: invoice_reviewer

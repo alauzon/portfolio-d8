@@ -1,0 +1,28 @@
+uuid: 2a7ec8e8-a8b5-47a3-b4c5-326db5993c69
+langcode: en
+status: true
+dependencies:
+  config:
+    - comment.type.comment_node_invoice
+    - field.field.comment.comment_node_invoice.comment_body
+  module:
+    - text
+id: comment.comment_node_invoice.default
+targetEntityType: comment
+bundle: comment_node_invoice
+mode: default
+content:
+  comment_body:
+    label: hidden
+    weight: 0
+    type: text_default
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  langcode: true

@@ -1,0 +1,30 @@
+uuid: 119463bf-a765-455d-a844-41cc606c38b1
+langcode: en
+status: true
+dependencies: {  }
+id: features_test_creator
+label: 'Testing: Features creator'
+weight: 9
+is_admin: false
+permissions:
+  - 'access ckeditor_media_browser entity browser pages'
+  - 'access contextual links'
+  - 'access image_browser entity browser pages'
+  - 'access in-place editing'
+  - 'access media_browser entity browser pages'
+  - 'access panels in-place editing'
+  - 'access toolbar'
+  - 'administer panelizer node features_test content'
+  - 'administer panelizer node features_test layout'
+  - 'change layouts in place editing'
+  - 'create features_test content'
+  - 'create url aliases'
+  - 'edit own features_test content'
+  - 'use editorial transition create_new_draft'
+  - 'use editorial transition review'
+  - 'use moderation sidebar'
+  - 'use text format rich_text'
+  - 'view any unpublished content'
+  - 'view features_test revisions'
+  - 'view latest version'
+  - 'view own unpublished content'

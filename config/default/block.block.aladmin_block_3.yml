@@ -1,0 +1,30 @@
+uuid: 597974c5-604c-4bc6-bf87-2f476a2c68fe
+langcode: en
+status: false
+dependencies:
+  content:
+    - 'block_content:basic:60d8b6a9-4043-46b8-9806-a1b537eef37d'
+  module:
+    - block_content
+    - system
+  theme:
+    - aladmin
+id: aladmin_block_3
+theme: aladmin
+region: ''
+weight: -12
+provider: null
+plugin: 'block_content:60d8b6a9-4043-46b8-9806-a1b537eef37d'
+settings:
+  id: 'block_content:60d8b6a9-4043-46b8-9806-a1b537eef37d'
+  label: ''
+  provider: block_content
+  label_display: '0'
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: '/admin/*'

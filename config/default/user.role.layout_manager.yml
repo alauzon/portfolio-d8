@@ -11,5 +11,9 @@ is_admin: false
 permissions:
   - 'administer node display'
   - 'administer panelizer'
+  - 'administer panelizer node article defaults'
+  - 'administer panelizer node features_test defaults'
+  - 'administer panelizer node invoice defaults'
   - 'administer panelizer node landing_page defaults'
   - 'administer panelizer node page defaults'
+  - 'administer panelizer node site defaults'

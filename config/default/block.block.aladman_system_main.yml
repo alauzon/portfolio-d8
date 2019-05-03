@@ -1,0 +1,24 @@
+uuid: 7f116da6-8bed-4850-9d29-121e61ef7bad
+langcode: en
+status: false
+dependencies:
+  module:
+    - system
+  theme:
+    - aladman
+id: aladman_system_main
+theme: aladman
+region: ''
+weight: 0
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: ''
+  provider: system
+  label_display: '0'
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: '/admin/*'

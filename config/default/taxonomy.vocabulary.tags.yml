@@ -1,0 +1,9 @@
+uuid: 45c4f83a-1269-4a97-b0a0-b9c783abfab7
+langcode: en
+status: true
+dependencies: {  }
+name: Tags
+vid: tags
+description: 'Utilisez les étiquettes pour regrouper les articles sur des sujets similaires dans des catégories.'
+hierarchy: 0
+weight: 0

@@ -1,0 +1,24 @@
+uuid: da1d645a-c380-4722-9c18-9b8969c6b692
+langcode: en
+status: false
+dependencies:
+  config:
+    - views.view.comments_recent
+  module:
+    - views
+  theme:
+    - aladmin
+id: aladmin_comment_recent
+theme: aladmin
+region: ''
+weight: -15
+provider: null
+plugin: 'views_block:comments_recent-block_1'
+settings:
+  id: 'views_block:comments_recent-block_1'
+  label: ''
+  provider: views
+  label_display: '0'
+  views_label: ''
+  items_per_page: none
+visibility: {  }

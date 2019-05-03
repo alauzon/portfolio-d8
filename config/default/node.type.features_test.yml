@@ -1,0 +1,11 @@
+uuid: 366cfedd-e8b9-4dd5-a4f9-f21c23cdc047
+langcode: en
+status: true
+dependencies: {  }
+name: 'Testing: Features'
+type: features_test
+description: 'Content type provided for Features tests.'
+help: ''
+new_revision: false
+preview_mode: 1
+display_submitted: true

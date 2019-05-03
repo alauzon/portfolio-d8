@@ -1,0 +1,10 @@
+uuid: 766169f5-181b-45c4-b74f-afdb3bad59eb
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_collection
+id: field_collection_item.full
+label: Full
+targetEntityType: field_collection_item
+cache: true

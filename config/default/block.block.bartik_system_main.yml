@@ -1,0 +1,24 @@
+uuid: 8221f5cd-7150-4939-9a60-2bcd586c8f13
+langcode: en
+status: false
+dependencies:
+  module:
+    - system
+  theme:
+    - bartik
+id: bartik_system_main
+theme: bartik
+region: ''
+weight: 0
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: ''
+  provider: system
+  label_display: '0'
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: '/admin/*'

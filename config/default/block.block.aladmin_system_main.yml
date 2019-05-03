@@ -1,0 +1,20 @@
+uuid: 08f72ac3-bb25-4f15-8c46-bcd43b8863ea
+langcode: en
+status: false
+dependencies:
+  module:
+    - system
+  theme:
+    - aladmin
+id: aladmin_system_main
+theme: aladmin
+region: ''
+weight: 0
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: ''
+  provider: system
+  label_display: '0'
+visibility: {  }

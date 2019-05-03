@@ -1,0 +1,30 @@
+uuid: 187f6d04-ba9d-443e-b3b4-e19491c2958f
+langcode: en
+status: false
+dependencies:
+  content:
+    - 'block_content:basic:821b0f0e-4f6e-47dd-9fff-e6eb26bd1a72'
+  module:
+    - block_content
+    - system
+  theme:
+    - aladman
+id: aladman_block_2
+theme: aladman
+region: ''
+weight: 0
+provider: null
+plugin: 'block_content:821b0f0e-4f6e-47dd-9fff-e6eb26bd1a72'
+settings:
+  id: 'block_content:821b0f0e-4f6e-47dd-9fff-e6eb26bd1a72'
+  label: ''
+  provider: block_content
+  label_display: '0'
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: '/admin/*'

@@ -1,0 +1,21 @@
+uuid: 255e33a4-17d1-4a33-9ca8-5135ebfaccad
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_tags
+    - node.type.article
+id: node.article.field_tags
+field_name: field_tags
+entity_type: node
+bundle: article
+label: Tags
+description: 'Saisissez une liste de mots séparés par des virgules pour décrire votre contenu.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings: {  }
+field_type: entity_reference

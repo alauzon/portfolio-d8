@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.page.body
+    - field.field.node.page.comment_node_page
     - field.field.node.page.field_meta_tags
     - field.field.node.page.panelizer
     - node.type.page
@@ -20,8 +21,8 @@ mode: teaser
 content:
   body:
     label: hidden
+    weight: 0
     type: text_summary_or_trimmed
-    weight: 100
     settings:
       trim_length: 600
     third_party_settings: {  }
@@ -29,7 +30,16 @@ content:
   links:
     weight: 101
     region: content
+  title:
+    label: hidden
+    type: string
+    weight: -5
+    region: content
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
 hidden:
+  comment_node_page: true
   content_moderation_control: true
   field_meta_tags: true
   langcode: true

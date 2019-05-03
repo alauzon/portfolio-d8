@@ -1,0 +1,18 @@
+uuid: 417d0d46-d710-49d4-bc17-27ca4ef0b1d2
+langcode: en
+status: false
+dependencies:
+  theme:
+    - aladmin
+id: aladmin_menu_features
+theme: aladmin
+region: ''
+weight: -13
+provider: null
+plugin: 'system_menu_block:features'
+settings:
+  id: broken
+  label: ''
+  provider: core
+  label_display: '0'
+visibility: {  }

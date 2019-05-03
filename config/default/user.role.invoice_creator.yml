@@ -1,0 +1,30 @@
+uuid: 7b066fa6-d5c2-4371-9851-ac29aeab1630
+langcode: en
+status: true
+dependencies: {  }
+id: invoice_creator
+label: 'Facture creator'
+weight: 11
+is_admin: false
+permissions:
+  - 'access ckeditor_media_browser entity browser pages'
+  - 'access contextual links'
+  - 'access image_browser entity browser pages'
+  - 'access in-place editing'
+  - 'access media_browser entity browser pages'
+  - 'access panels in-place editing'
+  - 'access toolbar'
+  - 'administer panelizer node invoice content'
+  - 'administer panelizer node invoice layout'
+  - 'change layouts in place editing'
+  - 'create invoice content'
+  - 'create url aliases'
+  - 'edit own invoice content'
+  - 'use editorial transition create_new_draft'
+  - 'use editorial transition review'
+  - 'use moderation sidebar'
+  - 'use text format rich_text'
+  - 'view any unpublished content'
+  - 'view invoice revisions'
+  - 'view latest version'
+  - 'view own unpublished content'

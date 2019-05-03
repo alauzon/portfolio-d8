@@ -1,0 +1,21 @@
+uuid: 91549589-1329-427e-8c9a-07b829f7a293
+langcode: en
+status: false
+dependencies:
+  theme:
+    - aladmin
+id: aladmin_statistics_popular
+theme: aladmin
+region: ''
+weight: -11
+provider: null
+plugin: statistics_popular_block
+settings:
+  id: broken
+  label: ''
+  provider: core
+  label_display: '0'
+  top_day_num: 0
+  top_all_num: 0
+  top_last_num: 0
+visibility: {  }

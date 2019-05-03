@@ -1,14 +1,14 @@
 uuid: 64382147-45ae-4749-8c35-46c69b1db206
-name: 'Portfolio D8'
-mail: no-reply@acquia.com
+name: portfolio.alainlauzon.com
+mail: alauzon@alainlauzon.com
 slogan: ''
 page:
-  403: ''
-  404: ''
-  front: /node
+  403: /
+  404: /
+  front: /taxonomy/term/1
 admin_compact_mode: false
 weight_select_max: 100
 langcode: en
-default_langcode: en
+default_langcode: fr
 _core:
   default_config_hash: yXadRE77Va-G6dxhd2kPYapAvbnSvTF6hO4oXiOEynI

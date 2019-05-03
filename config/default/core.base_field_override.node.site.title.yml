@@ -1,0 +1,18 @@
+uuid: ad486584-0e71-4be4-8266-6dd0713c9a7e
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.site
+id: node.site.title
+field_name: title
+entity_type: node
+bundle: site
+label: Titre
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

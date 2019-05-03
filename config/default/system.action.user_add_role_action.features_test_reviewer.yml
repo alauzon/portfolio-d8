@@ -1,0 +1,14 @@
+uuid: b8505f28-bf40-476c-a584-2bcdbfd68a8d
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.features_test_reviewer
+  module:
+    - user
+id: user_add_role_action.features_test_reviewer
+label: 'Add the Testing: Features reviewer role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: features_test_reviewer
