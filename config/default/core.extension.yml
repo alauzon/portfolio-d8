@@ -100,6 +100,9 @@ module:
   migrate_drupal: 0
   migrate_drupal_multilingual: 0
   migrate_drupal_ui: 0
+  migrate_plus: 0
+  migrate_tools: 0
+  migrate_upgrade: 0
   moderation_dashboard: 0
   moderation_sidebar: 0
   module_filter: 0
