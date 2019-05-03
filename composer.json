@@ -55,6 +55,7 @@
         "drupal/features": "^3.8.0",
         "drupal/field_collection": "^1.0@alpha",
         "drupal/field_group": "^1.0",
+        "drupal/field_group_migrate": "^1.0",
         "drupal/fontyourface": "^3.2",
         "drupal/hacked": "^2.0@beta",
         "drupal/htmlmail": "^3.0@alpha",
@@ -107,6 +108,9 @@
             },
             "drupal/core":{
                 "Error: Call to a member function getLabel() after enable layout_builder": "https://www.drupal.org/files/issues/2018-07-16/2985882-entityfield-2.patch"
+            },
+            "drupal/field_group":{
+                "Getting d6_field_group plugin must define the source_module property Error When Using migrate-upgrade": "https://www.drupal.org/files/issues/2018-03-12/2951335-7-fix-core-8-5-fieldgroup-migration.patch"
             }
         },
         "installer-types": ["bower-asset", "npm-asset"],
