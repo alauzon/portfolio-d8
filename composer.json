@@ -107,7 +107,8 @@
                 "Undefined function drupal_http_query": "https://www.drupal.org/files/issues/2019-01-29/2284015-8.patch"
             },
             "drupal/core":{
-                "Error: Call to a member function getLabel() after enable layout_builder": "https://www.drupal.org/files/issues/2018-07-16/2985882-entityfield-2.patch"
+                "Error: Call to a member function getLabel() after enable layout_builder": "https://www.drupal.org/files/issues/2018-07-16/2985882-entityfield-2.patch",
+                "Invalid argument supplied for foreach() Migration.php:634": "https://www.drupal.org/files/issues/2018-06-10/2978664-migration_0.patch"
             },
             "drupal/field_group":{
                 "Getting d6_field_group plugin must define the source_module property Error When Using migrate-upgrade": "https://www.drupal.org/files/issues/2018-03-12/2951335-7-fix-core-8-5-fieldgroup-migration.patch"

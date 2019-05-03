@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "94824c61e8469b9b84fd77d3425727bf",
+    "content-hash": "ecd9e413051301446069db07e5321d5b",
     "packages": [
         {
             "name": "acquia/blt",
@@ -4683,6 +4683,7 @@
                 },
                 "patches_applied": {
                     "Error: Call to a member function getLabel() after enable layout_builder": "https://www.drupal.org/files/issues/2018-07-16/2985882-entityfield-2.patch",
+                    "Invalid argument supplied for foreach() Migration.php:634": "https://www.drupal.org/files/issues/2018-06-10/2978664-migration_0.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "2885441 - EntityReferenceAutocompleteWidget should define its size setting as an integer": "https://www.drupal.org/files/issues/2885441-2.patch",
                     "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2019-03-05/2815221-116.patch",
@@ -5874,6 +5875,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Getting d6_field_group plugin must define the source_module property Error When Using migrate-upgrade": "https://www.drupal.org/files/issues/2018-03-12/2951335-7-fix-core-8-5-fieldgroup-migration.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
