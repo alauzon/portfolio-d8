@@ -175,6 +175,3 @@ mason_ui: 1.0.0-beta4
 metatag_facebook: 1.8.0
 metatag_open_graph: 1.8.0
 field_group_migrate: 1.0.0
-migrate_plus: 4.2.0
-migrate_tools: 4.1.0
-migrate_upgrade: 3.0.0
