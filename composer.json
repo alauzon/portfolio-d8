@@ -101,9 +101,6 @@
         "patches": {
             "drupal/admin_menu": {
                 "Undefined function drupal_http_query": "https://www.drupal.org/files/issues/2019-01-29/2284015-8.patch"
-            },
-            "drupal/core":{
-                "Error: Call to a member function getLabel() after enable layout_builder": "https://www.drupal.org/files/issues/2018-07-16/2985882-entityfield-2.patch"
             }
         },
         "installer-types": ["bower-asset", "npm-asset"],
