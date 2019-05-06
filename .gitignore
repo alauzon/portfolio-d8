@@ -78,8 +78,3 @@ tests/behat/local.yml
 blt/local.blt.yml
 deployment_identifier
 
-# Drupal 7
-portfolio-d7/docroot/sites/default/files
-portfolio-d7/docroot/sites/default/files.tgz
-portfolio-d7/docroot/sites/default/fli.old
-

@@ -42,11 +42,6 @@ apache_vhosts:
     serveralias: "www.dashboard.{{ drupal_domain }}"
     documentroot: "/var/www/dashboard"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
-  # Domain for the D7 portfolio
-  - servername: "local.portfolio-d7.com"
-    serveralias: "www.local.portfolio-d7.com"
-    documentroot: "/var/www/portfolio-d8/portfolio-d7/docroot"
-    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 #  - servername: "local.second-drupal-site.com"
 #    documentroot: "{{ drupal_core_path }}"
 #    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
@@ -58,9 +53,9 @@ mysql_databases:
   - name: drupal
     encoding: utf8
     collation: utf8_general_ci
-  - name: drupal_d7
-    encoding: utf8
-    collation: utf8_general_ci
+#  - name: drupal_two
+#    encoding: utf8
+#    collation: utf8_general_ci
 
 mysql_users:
   - name: drupal
@@ -74,7 +69,7 @@ drupal_install_site: false
 
 # Drupal VM automatically creates a drush alias file in your ~/.drush folder if
 # this variable is 'true'.
-configure_drush_aliases: true
+configure_drush_aliases: false
 
 extra_packages: [patchutils, sqlite]
 installed_extras: [adminer, selenium, drush, mailhog, memcached, nodejs, solr, xdebug]
