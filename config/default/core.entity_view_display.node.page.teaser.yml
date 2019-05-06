@@ -5,8 +5,6 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.page.body
-    - field.field.node.page.field_meta_tags
-    - field.field.node.page.panelizer
     - node.type.page
   module:
     - text
@@ -29,8 +27,4 @@ content:
   links:
     weight: 101
     region: content
-hidden:
-  content_moderation_control: true
-  field_meta_tags: true
-  langcode: true
-  panelizer: true
+hidden: {  }
