@@ -10,6 +10,19 @@ project:
 git:
   default_branch: master
   remotes: {  }
+  commit-msg:
+    # Commit messages must conform to this pattern.
+    pattern: "/^(Add)|(Remove)|(Refactor)|(Change)|(Fix):\s.+/"
+    # Human readable help description explaining the pattern/restrictions.
+    help_description: "Commit msg need to start from either of:
+                             - Remove:
+                             - Fix:
+                             - Refactor:
+                             - Change:
+                             - Add:
+                             Remember about space char after the :!"
+    # Provide an example of a valid commit message.
+    example: "Add: Module configuration."
 deploy:
   tag_source: true
 drush:
