@@ -39,6 +39,7 @@
         "drupal/acquia_connector": "^1.5.0",
         "drupal/acquia_purge": "^1.0-beta3",
         "drupal/admin_menu_toolbar": "3.x-dev",
+        "drupal/admin_toolbar": "^1.26",
         "drupal/captcha": "^1.0@beta",
         "drupal/coffee": "^1.0@beta",
         "drupal/cog": "^1.0.0",
